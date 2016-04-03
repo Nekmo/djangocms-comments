@@ -1,0 +1,13 @@
+{% load bootstrap3 %}
+<form action="." method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-19">
+            {% bootstrap_field form.username show_label=false horizontal_label_class='col-md-0' %}
+            {% bootstrap_field form.email show_label=false horizontal_label_class='col-md-0' %}
+            {% bootstrap_field form.website show_label=false horizontal_label_class='col-md-0' %}
+        </div>
+    </div>
+    {% bootstrap_field form.body %}
+    {% bootstrap_button "Submit" button_type="submit" %}
+</form>
