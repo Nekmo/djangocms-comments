@@ -1,0 +1,9 @@
+.comment-box textarea {
+  height: 150px;
+  max-height: 450px; }
+.comment-box .avatar {
+  float: left;
+  padding-bottom: 15px;
+  padding-right: 15px; }
+
+/*# sourceMappingURL=comments.css.map */

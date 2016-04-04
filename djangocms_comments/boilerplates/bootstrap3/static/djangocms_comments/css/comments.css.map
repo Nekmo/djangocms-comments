@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAGI,qBAAS;EACL,MAAM,ECJY,KAAK;EDKvB,UAAU,ECJY,KAAK;ADO/B,oBAAQ;EACJ,KAAK,EAAE,IAAI;EACX,cAAc,ECPL,IAAI;EDQb,aAAa,ECRJ,IAAI",
+"sources": ["../scss/comments.scss","../scss/_variables.scss"],
+"names": [],
+"file": "comments.css"
+}

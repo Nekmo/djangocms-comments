@@ -1,0 +1,14 @@
+@import 'variables';
+
+.comment-box {
+    textarea {
+        height: $comment-textarea-height;
+        max-height: $comment-textarea-max-height;
+    }
+
+    .avatar {
+        float: left;
+        padding-bottom: $avatar-padding;
+        padding-right: $avatar-padding;
+    }
+}
