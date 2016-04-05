@@ -1,12 +1,12 @@
-{% load bootstrap3 %}
+{% load bootstrap3 comments_utils %}
 <form action="{% url 'djangocms_comments_save_comment' %}" method="post" class="comment-box">
     {% csrf_token %}
     {% if is_user %}
     <div class="row">
         <div class="col-md-24">
-            <img src="http://www.gravatar.com/avatar/{{ user_email_hash }}" class="avatar" />
+            <img src="http://www.gravatar.com/avatar/{{ request.user.email|md5 }}" class="avatar" />
             <div>
-                Conectado como <strong>{{ request.user }}</strong>
+                <strong>{{ request.user }}</strong>
                 {% if request.user.is_staff %}<span class="label label-primary">Staff</span>{% endif %}
             </div>
             <div>X comentarios</div>

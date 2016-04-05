@@ -1,4 +1,3 @@
-from hashlib import md5
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django.contrib.contenttypes.models import ContentType
@@ -19,7 +18,7 @@ class CommentsPlugin(CMSPluginBase):
         context['comments'] = Comment.objects.all()
         initial = {
             'config_id': instance.config.pk,
-            'page_type': ContentType.objects.get_for_model(obj),
+            'page_type': ContentType.objects.get_for_model(obj).pk,
             'page_id': obj.pk,
         }
         if request.user.is_anonymous():
@@ -28,7 +27,6 @@ class CommentsPlugin(CMSPluginBase):
         else:
             context['form'] = CommentForm(initial=initial)
             context['is_user'] = True
-            context['user_email_hash'] = md5(bytearray(getattr(request.user, 'email', ''), 'utf-8')).hexdigest()
         return super(CommentsPlugin, self).render(context, instance, placeholder)
 
 

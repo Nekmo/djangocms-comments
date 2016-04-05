@@ -1,5 +1,44 @@
 @import 'variables';
 
+.comment {
+    .thumbnail {
+        padding: 0;
+    }
+    .panel {
+    	position:relative;
+    }
+    .panel>.panel-heading:after,.panel>.panel-heading:before{
+    	position:absolute;
+    	top:11px;left:-16px;
+    	right:100%;
+    	width:0;
+    	height:0;
+    	display:block;
+    	content:" ";
+    	border-color:transparent;
+    	border-style:solid solid outset;
+    	pointer-events:none;
+    }
+    .panel>.panel-heading:after{
+    	border-width:7px;
+    	border-right-color:#f7f7f7;
+    	margin-top:1px;
+    	margin-left:2px;
+    }
+    .panel>.panel-heading:before{
+    	border-right-color:#ddd;
+    	border-width:8px;
+    }
+
+    pre {
+        border: 0;
+        background: transparent;
+        font-family: 'Roboto Slab', 'Roboto', serif;
+        margin: 0;
+        padding: 0;
+    }
+}
+
 .comment-box {
     textarea {
         height: $comment-textarea-height;

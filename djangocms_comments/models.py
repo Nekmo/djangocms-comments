@@ -49,6 +49,12 @@ class AnonymousAuthor(models.Model):
     email = models.EmailField()
     website = models.URLField(blank=True)
 
+    def __str__(self):
+        return self.username
+
+    def __unicode__(self):
+        return self.username
+
 
 class Comment(models.Model):
     config = models.ForeignKey(CommentsConfig)

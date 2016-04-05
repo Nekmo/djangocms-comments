@@ -1,4 +1,4 @@
-{% load staticfiles sekizai_tags %}
+{% load staticfiles sekizai_tags cms_tags comments_utils %}
 {% addtoblock "js" %}
 <script src="{% static 'djangocms_comments/js/autosize.min.js' %}"></script>
 <script src="{% static 'djangocms_comments/js/md5.min.js' %}"></script>
@@ -9,6 +9,24 @@
 {% endaddtoblock %}
 <h2>Comments</h2>
 {% for comment in comments.all %}
-    <div>{{ comment.pk }}{{ comment.author }}{{ comment.body }} {{ comment.user_agent }}</div>
+    {% render_model_block comment %}
+        <div class="row comment">
+            <div class="col-md-3">
+                <img src="http://www.gravatar.com/avatar/{{ comment.author.email|md5 }}" class="avatar" />
+            </div>
+            <div class="col-md-21">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>{{ comment.author }}</strong>
+                        <span>{{ comment.created_at|timesince }}</span>
+                    </div>
+                    <div class="panel-body">
+                        <pre>{{ comment.body }}</pre>
+                    </div><!-- /panel-body -->
+                </div><!-- /panel panel-default -->
+            </div>
+
+        </div>
+    {% endrender_model_block%}
 {% endfor %}
 {% include "djangocms_comments/comment_box.html" %}
