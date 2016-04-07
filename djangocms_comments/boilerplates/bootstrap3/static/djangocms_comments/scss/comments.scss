@@ -1,6 +1,10 @@
 @import 'variables';
 
 .comment {
+    &.unpublished .panel-body {
+        background: url('../img/unpublished.png');
+    }
+
     .thumbnail {
         padding: 0;
     }

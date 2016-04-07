@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from cms.models.pluginmodel import CMSPlugin
+from django.template.defaultfilters import truncatechars
 from django.utils.translation import ugettext_lazy as _
 
 MODERATED = [
@@ -81,6 +82,16 @@ class Comment(models.Model):
     published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def is_edited(self):
+        return self.updated_at.replace(second=0, microsecond=0) > self.created_at.replace(second=0, microsecond=0)
+
+    def __str__(self):
+        return u'[{}] {}'.format(self.page, truncatechars(self.body, 40))
+
+    def __unicode__(self):
+        return self.__str__()
 
 
 class Comments(CommentsCMSPlugin):

@@ -1,0 +1,29 @@
+{% extends "admin/change_form.html" %}
+{% load i18n comments_utils %}
+{% block field_sets %}
+    <div id="author-comment-card">
+        <img src="http://www.gravatar.com/avatar/{{ original.author.email|md5 }}" class="avatar" />
+        <div class="author-comment-info">
+            <div>
+                {% trans "Written by" %}
+                <strong>{{ original.author }}</strong>
+                <span title="{{ original.created_at }}">{{ original.created_at|timesince }}</span>
+                {% trans "ago" %}
+                {% if original.is_edited %}
+                    (and edited <span title="{{ original.updated_at }}">{{ original.updated_at|timesince }}</span>
+                    {% trans "ago" %})
+                {% endif %}
+            </div>
+            <div>
+                <span title="{{ original.user_agent }}">{{ user_agent }}</span>
+                (ip. <a href="https://geoiptool.com/es/?ip={{ original.user_ip }}" target="_blank">
+                    {{ original.user_ip }}</a>)
+            </div>
+            <div>
+                <span>{% trans "Referrer" %}:</span>
+                <a href="{{ original.referrer }}">{{ original.referrer|truncatechars:100 }}</a>
+            </div>
+        </div>
+    </div>
+    {{ block.super }}
+{% endblock %}

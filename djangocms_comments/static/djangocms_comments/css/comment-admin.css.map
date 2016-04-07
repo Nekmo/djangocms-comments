@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,oBAAqB;EAEjB,aAAa,EAAE,IAAI;EACnB,4BAAQ;IACJ,cAAc,EAAE,GAAG;EAGvB,yCAAqB;IACjB,OAAO,EAAE,YAAY",
+"sources": ["../scss/comment-admin.scss"],
+"names": [],
+"file": "comment-admin.css"
+}

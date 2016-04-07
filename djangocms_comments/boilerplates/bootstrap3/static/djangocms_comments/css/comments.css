@@ -1,3 +1,5 @@
+.comment.unpublished .panel-body {
+  background: url("../img/unpublished.png"); }
 .comment .thumbnail {
   padding: 0; }
 .comment .panel {

@@ -15,10 +15,14 @@ class CommentsPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         obj = context['object']
         request = context['request']
-        context['comments'] = Comment.objects.all()
+        ct = ContentType.objects.get_for_model(obj)
+        comments = Comment.objects.filter(page_type=ct, page_id=obj.pk)
+        if not getattr(request.user, 'is_staff', False):
+            comments = comments.filter(published=True)
+        context['comments'] = comments
         initial = {
             'config_id': instance.config.pk,
-            'page_type': ContentType.objects.get_for_model(obj).pk,
+            'page_type': ct.pk,
             'page_id': obj.pk,
         }
         if request.user.is_anonymous():

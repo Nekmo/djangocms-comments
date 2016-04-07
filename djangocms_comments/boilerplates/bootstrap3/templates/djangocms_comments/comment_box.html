@@ -1,31 +1,42 @@
 {% load bootstrap3 comments_utils %}
-<form action="{% url 'djangocms_comments_save_comment' %}" method="post" class="comment-box">
-    {% csrf_token %}
-    {% if is_user %}
-    <div class="row">
-        <div class="col-md-24">
-            <img src="http://www.gravatar.com/avatar/{{ request.user.email|md5 }}" class="avatar" />
-            <div>
-                <strong>{{ request.user }}</strong>
-                {% if request.user.is_staff %}<span class="label label-primary">Staff</span>{% endif %}
-            </div>
-            <div>X comentarios</div>
+<div class="comment-box{% if comment %} success-form{% endif %}">
+    {% if comment %}
+        <div class="comment-success">
+            {% include "djangocms_comments/comment.html" with comment=comment %}
         </div>
-    </div>
-    {% else %}
-    <div class="row">
-        <div class="col-md-19">
-            {% bootstrap_field form.username show_label=false horizontal_label_class='col-md-0' %}
-            {% bootstrap_field form.email show_label=false horizontal_label_class='col-md-0' %}
-            {% bootstrap_field form.website show_label=false horizontal_label_class='col-md-0' %}
-        </div>
-    </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-24">{% bootstrap_field form.body show_label=false %}</div>
-    </div>
-    {{ form.config_id }}
-    {{ form.page_type }}
-    {{ form.page_id }}
-    {% bootstrap_button "Submit" button_type="submit" %}
-</form>
+    <form action="{% url 'djangocms_comments_save_comment' %}" method="post" class="comment-box-form">
+        {% csrf_token %}
+        {% if comment %}
+            {% bootstrap_alert "Your comment has been sent" alert_type="success" %}
+        {% endif %}
+        {% if is_user %}
+        <div class="row">
+            <div class="col-md-24">
+                <img src="http://www.gravatar.com/avatar/{{ request.user.email|md5 }}" class="avatar" />
+                <div>
+                    <strong>{{ request.user }}</strong>
+                    {% if request.user.is_staff %}<span class="label label-primary">Staff</span>{% endif %}
+                </div>
+                <div>X comentarios</div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-md-19">
+                {% bootstrap_field form.username show_label=false horizontal_label_class='col-md-0' %}
+                {% bootstrap_field form.email show_label=false horizontal_label_class='col-md-0' %}
+                {% bootstrap_field form.website show_label=false horizontal_label_class='col-md-0' %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            {% bootstrap_form_errors form %}
+            <div class="col-md-24">{% bootstrap_field form.body show_label=false %}</div>
+        </div>
+        {{ form.config_id }}
+        {{ form.page_type }}
+        {{ form.page_id }}
+        {% bootstrap_button "Submit" button_type="submit" %}
+    </form>
+</div>

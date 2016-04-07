@@ -1,16 +1,12 @@
-import copy
-
-from django.core.signing import Signer
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, EmailField, URLField, IntegerField
-from django.forms.widgets import HiddenInput, Textarea
+from django.forms.widgets import Textarea
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments import settings
 from djangocms_comments.models import AnonymousAuthor, CommentsConfig
+from djangocms_comments.widgets import SignedHiddenInput
 from .models import Comment
-
-
-signer = Signer()
 
 
 def get_client_ip(request):
@@ -24,39 +20,41 @@ def get_client_ip(request):
 
 class CommentForm(ModelForm):
     signed_fields = ['config_id', 'page_id', 'page_type']
-    config_id = IntegerField(widget=HiddenInput)
+    config_id = IntegerField(widget=SignedHiddenInput)
     body = CharField(widget=Textarea(attrs={'rows': settings.COMMENT_TEXTAREA_ROWS}), label=_('Your comment'))
 
     def __init__(self, data=None, **kwargs):
         self.request = kwargs.pop('request', None)
-        data = self.signer_fields(data, 'unsign')
-        kwargs['initial'] = self.signer_fields(kwargs.get('initial', {}))
+        # data = self.signer_fields(data, 'unsign')
+        # kwargs['initial'] = self.signer_fields(kwargs.get('initial', {}))
         super(CommentForm, self).__init__(data, **kwargs)
 
-    def signer_fields(self, data, action='sign'):
-        if data is None:
-            return None
-        data = copy.copy(data)
-        for field in self.signed_fields:
-            if field in data:
-                data[field] = getattr(signer, action)(data[field])
-        return data
+    def clean(self):
+        cleaned_data = super(CommentForm, self).clean()
+        if self.request and not getattr(self.request.user, 'is_staff', False):
+            raise ValidationError(_('You must wait to post a new comment.'))
+        return cleaned_data
 
     def save(self, commit=True, author=None):
         author = author or self.request.user
+        published = settings.COMMENT_PUBLISHED_BY_DEFAULT
+        if getattr(self.request.user, 'is_staff', False):
+            # Always published for admins
+            published = True
         comment = Comment(author=author, user_ip=get_client_ip(self.request),
                           config=CommentsConfig.objects.get(pk=self.cleaned_data['config_id']),
                           user_agent=self.request.META.get('HTTP_USER_AGENT', 'unknown'),
                           referrer=self.request.META.get('HTTP_REFERER', ''),
+                          published=published,
                           **{key: self.cleaned_data[key] for key in ['body', 'page_id', 'page_type']})
         if commit:
             comment.save()
-        return commit
+        return comment
 
     class Meta:
         widgets = {
-            'page_id': HiddenInput,
-            'page_type': HiddenInput,
+            'page_id': SignedHiddenInput,
+            'page_type': SignedHiddenInput,
         }
         model = Comment
         fields = ('body', 'page_type', 'page_id', 'config_id')
@@ -69,8 +67,8 @@ class UnregisteredCommentForm(CommentForm):
 
     class Meta:
         widgets = {
-            'page_id': HiddenInput,
-            'page_type': HiddenInput,
+            'page_id': SignedHiddenInput,
+            'page_type': SignedHiddenInput,
         }
         model = Comment
         fields = ('username', 'email', 'website', 'body', 'page_type', 'page_id', 'config_id')
