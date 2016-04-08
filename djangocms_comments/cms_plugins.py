@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments.forms import UnregisteredCommentForm, CommentForm
+from djangocms_comments.views import get_form_class, get_is_user
 from .models import Comments, Comment
 
 
@@ -16,22 +17,21 @@ class CommentsPlugin(CMSPluginBase):
         obj = context['object']
         request = context['request']
         ct = ContentType.objects.get_for_model(obj)
-        comments = Comment.objects.filter(page_type=ct, page_id=obj.pk)
-        if not getattr(request.user, 'is_staff', False):
-            comments = comments.filter(published=True)
-        context['comments'] = comments
+        context['comments'] = self.get_comments(ct, obj, request)
         initial = {
             'config_id': instance.config.pk,
             'page_type': ct.pk,
             'page_id': obj.pk,
         }
-        if request.user.is_anonymous():
-            context['form'] = UnregisteredCommentForm(initial=initial)
-            context['is_user'] = False
-        else:
-            context['form'] = CommentForm(initial=initial)
-            context['is_user'] = True
+        context['form'] = get_form_class(request)(initial=initial)
+        context['is_user'] = get_is_user(request)
         return super(CommentsPlugin, self).render(context, instance, placeholder)
+
+    def get_comments(self, ct, obj, request):
+        comments = Comment.objects.filter(page_type=ct, page_id=obj.pk)
+        if not getattr(request.user, 'is_staff', False):
+            comments = comments.filter(published=True)
+        return comments
 
 
 plugin_pool.register_plugin(CommentsPlugin)

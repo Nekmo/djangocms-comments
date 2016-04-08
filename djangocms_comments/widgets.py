@@ -12,12 +12,13 @@ class SignedHiddenInput(HiddenInput):
 
     def value_from_datadict(self, data, files, name):
         value = super(SignedHiddenInput, self).value_from_datadict(data, files, name)
+        value = signer.unsign(value)
         if self.include_field_name:
             name_key = '{}-'.format(name)
             if not value.startswith(name_key):
                 raise SuspiciousOperation()
             value = value.replace(name_key, '', 1)
-        return signer.unsign(value)
+        return value
 
     def render(self, name, value, attrs=None):
         if self.include_field_name:
