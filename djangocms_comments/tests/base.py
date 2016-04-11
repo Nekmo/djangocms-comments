@@ -41,6 +41,7 @@ class TestBase(object):
         return dict(page_id=obj.pk, page_type=ContentType.objects.get_for_model(obj))
 
     def get_request(self, user, method='get', data=None, url='/demo', is_test=True):
+        data = data or {}  # Django 1.6 support
         request = getattr(self.factory, method)(url, data)
         request.user = user or self.anonymous
         request.is_test = is_test

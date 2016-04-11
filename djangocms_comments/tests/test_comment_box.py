@@ -1,4 +1,6 @@
 import math
+
+import django
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import SuspiciousOperation
 from django.test import TestCase
@@ -35,13 +37,17 @@ class CommentsListFilter(TestBase, TestCase):
     def test_anonymous_comment(self):
         data = {
             'username': 'Patsy', 'email': 'squire@camelot.com', 'website': 'http://camelot.com/test_anonymous_comment',
-            'body': PATSY_BODY,
+            'body': PATSY_BODY + ' test_anonymous_comment',
         }
         response = self.send_comment(self.anonymous, data=data)
         self.assertFalse(response.context_data['form'].errors)
         self.assertFalse(response.context_data['form'].is_bound)
-        self.assertEqual(Comment.objects.filter(config=self.config, anonymous_authors__website=data['website'],
-                                                **self.get_page_ct_id()).count(), 1)
+        q = dict(config=self.config, **self.get_page_ct_id())
+        if django.VERSION < (1, 7):
+            q['body'] = data['body']
+        else:
+            q['anonymous_authors__website'] = data['website']
+        self.assertEqual(Comment.objects.filter(**q).count(), 1)
 
     def test_user_comment(self):
         body = 'CommentsListFilter.test_user_comment test.' + ('This is a test!' * 8)

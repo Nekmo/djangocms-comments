@@ -1,4 +1,6 @@
+import django
 from django.conf import settings
+
 try:
     from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 except ImportError:
@@ -14,7 +16,6 @@ MODERATED = [
     ('edited', _('Edited')),
     ('deleted', _('Deleted')),
 ]
-
 
 REQUIRES_ATTENTION = [
     ('spam', _('Spam')),
@@ -89,7 +90,8 @@ class AnonymousAuthor(models.Model):
     email = models.EmailField()
     website = models.URLField(blank=True)
     comments = GenericRelation(Comment, object_id_field='author_id', content_type_field='author_type',
-                               related_query_name='anonymous_authors')
+                               **{('related_name' if django.VERSION < (1, 7)
+                                   else 'related_query_name'): 'anonymous_authors'})
 
     def __str__(self):
         return self.username
