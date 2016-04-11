@@ -1,3 +1,6 @@
+.. image:: https://img.shields.io/travis/Nekmo/djangocms-comments.svg?maxAge=2592000
+  :target: https://travis-ci.org/Nekmo/djangocms-comments
+
 DjangoCMS Comments
 ==================
 A comment system for Django CMS unintrusive and easy to use.
