@@ -66,7 +66,7 @@ class CommentsListFilter(TestBase, TestCase):
     def test_max_uppercase_ratio_comment_body(self):
         ratio = settings.MAX_UPPERCASE_RATIO_COMMENT_BODY
         body = 'spam eggs ' * 100
-        body = body[:math.ceil(len(body) * ratio) + 1].upper() + body[math.ceil(len(body) + 1 * ratio):]
+        body = body[:int(math.ceil(len(body) * ratio) + 1)].upper() + body[int(math.ceil(len(body) + 1 * ratio)):]
         response = self.send_comment(body=body)
         self.assertEqual(len(response.context_data['form'].errors), 1)
 
