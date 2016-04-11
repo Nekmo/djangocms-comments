@@ -2,9 +2,21 @@
   :target: https://travis-ci.org/Nekmo/djangocms-comments
   :alt: Latest Travis CI build status
 
+.. image:: https://img.shields.io/pypi/v/djangocms-comments.svg?style=flat-square
+  :target: https://pypi.python.org/pypi/djangocms-comments
+  :alt: Latest PyPI version
+
+.. image:: https://img.shields.io/pypi/pyversions/djangocms-comments.svg?style=flat-square
+  :target: https://pypi.python.org/pypi/djangocms-comments
+  :alt: Python versions
+
 .. image:: https://codeclimate.com/github/Nekmo/djangocms-comments/badges/gpa.svg
   :target: https://codeclimate.com/github/Nekmo/djangocms-comments
   :alt: Code Climate
+
+.. image:: https://img.shields.io/codecov/c/github/Nekmo/djangocms-comments/develop.svg?style=flat-square
+  :target: https://codecov.io/github/Nekmo/djangocms-comments
+  :alt: Test coverage
 
 DjangoCMS Comments
 ==================
