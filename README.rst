@@ -1,4 +1,4 @@
-.. image:: https://img.shields.io/travis/Nekmo/djangocms-comments.svg?maxAge=2592000
+.. image:: https://img.shields.io/travis/Nekmo/djangocms-comments.svg?style=flat-square&maxAge=2592000
   :target: https://travis-ci.org/Nekmo/djangocms-comments
   :alt: Latest Travis CI build status
 
@@ -10,7 +10,7 @@
   :target: https://pypi.python.org/pypi/djangocms-comments
   :alt: Python versions
 
-.. image:: https://codeclimate.com/github/Nekmo/djangocms-comments/badges/gpa.svg
+.. image:: https://img.shields.io/codeclimate/github/Nekmo/djangocms-comments.svg?style=flat-square
   :target: https://codeclimate.com/github/Nekmo/djangocms-comments
   :alt: Code Climate
 

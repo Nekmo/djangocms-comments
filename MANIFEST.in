@@ -1,1 +1,3 @@
 recursive-include djangocms_comments/templates *
+recursive-include djangocms_comments/static *
+recursive-include djangocms_comments/boilerplates *

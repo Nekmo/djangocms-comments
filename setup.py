@@ -16,7 +16,7 @@ import uuid
 # 1. Rellene la información de esta sección.
 # 2. Incluya un archivo requirements.txt con las dependencias.
 # 3. Cambie el archivo LICENSE.txt por el de su licencia.
-# 4. Añada un archivo README o README.md, el cual se trata de la la descripción extendida.
+# 4. Añada un archivo README, README.rst o README.md, el cual se trata de la la descripción extendida.
 
 #  Información del autor
 AUTHOR = 'Nekmo'
@@ -24,20 +24,27 @@ EMAIL = 'contacto@nekmo.com'
 
 # Información del paquete
 PACKAGE_NAME = 'djangocms-comments'
-PACKAGE_DOWNLOAD_URL = ''  # .tar.gz
-URL = ''  # Project url
+PACKAGE_DOWNLOAD_URL = 'https://github.com/Nekmo/djangocms-comments/archive/master.zip'  # .tar.gz
+URL = 'https://github.com/Nekmo/djangocms-comments'  # Project url
 STATUS_LEVEL = 1  # 1:Planning 2:Pre-Alpha 3:Alpha 4:Beta 5:Production/Stable 6:Mature 7:Inactive
-KEYWORDS = []  # Palabras clave
+KEYWORDS = ['djangocms', 'comments', 'djangocms-comments', 'cms', 'django']  # Palabras clave
 # https://github.com/github/choosealicense.com/tree/gh-pages/_licenses
+LICENSE = 'MIT'
 CLASSIFIERS = [
     # Common licenses
     'License :: OSI Approved :: MIT License',
+    'Framework :: Django',
+    'Framework :: Django :: 1.6',
+    'Framework :: Django :: 1.7',
+    'Framework :: Django :: 1.8',
+    'Framework :: Django :: 1.9',
     # 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     # 'License :: OSI Approved :: BSD License',
 ]  # https://pypi.python.org/pypi?%3Aaction=list_classifiers
-NATURAL_LANGUAGE = 'Spanish'  # English...
-DESCRIPTION = """
-Package short description.
+NATURAL_LANGUAGE = 'English'  # English...
+DESCRIPTION = """\
+A comment system for Django CMS unintrusive and easy to use.
+Add it to your pages without modifying your models. It is highly customizable!
 """
 
 # Requerido para la correcta instalación del paquete
@@ -53,7 +60,7 @@ PLATFORMS = [
     # 'android'
 ]
 ROOT_INCLUDE = ['requirements.txt', 'VERSION', 'LICENSE.txt']
-PYTHON_VERSIONS = ['2', '3']  # or ranges: 3.1-3.5, 2.6-3.4...
+PYTHON_VERSIONS = ['2.6-2.7', '3.3-3.5']  # or ranges: 3.1-3.5, 2.6-3.4...
 
 ######## FIN DE LA CONFIGURACIÓN DEL PAQUTE ########
 
@@ -62,8 +69,10 @@ __dir__ = os.path.abspath(os.path.dirname(__file__))
 
 # paths
 readme_path = os.path.join(__dir__, 'README')
-if not os.path.exists(readme_path):
-    readme_path = os.path.join(__dir__, 'README.md')
+for target in ['README.rst', 'README.md']:
+    if not os.path.exists(readme_path):
+        readme_path = os.path.join(__dir__, target)
+
 version_path = os.path.join(__dir__, 'VERSION')
 requirements_path = os.path.join(__dir__, 'requirements.txt')
 scripts_path = os.path.join(__dir__, 'scripts')
@@ -270,6 +279,10 @@ for version in range(2, 4):
         python_versions.append('%i :: Only' % version)
         break
 CLASSIFIERS.extend(['Programming Language :: Python :: %s' % version for version in python_versions])
+CLASSIFIERS.extend([
+    'Natural Language :: {0}'.format(NATURAL_LANGUAGE),
+    'Development Status :: {0} - {1}'.format(STATUS_LEVEL, status_name),
+])
 
 setup(
     name=PACKAGE_NAME,
@@ -283,10 +296,8 @@ setup(
 
     url=URL,
 
-    classifiers=CLASSIFIERS.extend([
-        'Natural Language :: {0}'.format(NATURAL_LANGUAGE),
-        'Development Status :: {0} - {1}'.format(STATUS_LEVEL, status_name),
-    ]),
+    license=LICENSE,
+    classifiers=CLASSIFIERS,
 
     platforms=PLATFORMS,
 
