@@ -71,7 +71,7 @@ class CommentForm(ModelForm):
                           user_agent=self.request.META.get('HTTP_USER_AGENT', 'unknown'),
                           referrer=self.request.META.get('HTTP_REFERER', ''),
                           published=published,
-                          **{key: self.cleaned_data[key] for key in ['body', 'page_id', 'page_type']})
+                          **dict((key, self.cleaned_data[key]) for key in ['body', 'page_id', 'page_type']))
         if commit:
             comment.save()
         return comment
@@ -105,8 +105,8 @@ class UnregisteredCommentForm(CommentForm):
         return username
 
     def save(self, commit=True, author=None):
-        author, exists = AnonymousAuthor.objects.get_or_create(**{key: self.cleaned_data[key] for key in
-                                                                  ['username', 'email', 'website']})
+        author, exists = AnonymousAuthor.objects.get_or_create(**dict((key, self.cleaned_data[key]) for key in
+                                                                ['username', 'email', 'website']))
         if not exists:
             author.save()
         return super(UnregisteredCommentForm, self).save(commit=commit, author=author)

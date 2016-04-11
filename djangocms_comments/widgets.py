@@ -17,7 +17,7 @@ class SignedHiddenInput(HiddenInput):
         except BadSignature:
             raise SuspiciousOperation()
         if self.include_field_name:
-            name_key = '{}-'.format(name)
+            name_key = '{0}-'.format(name)
             if not value.startswith(name_key):
                 raise SuspiciousOperation()
             value = value.replace(name_key, '', 1)

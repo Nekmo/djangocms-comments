@@ -53,7 +53,7 @@ class TestBase(object):
         new_data = {'body': body}
         new_data.update(self.get_sign_values(form))
         new_data.update(data or {})
-        request = self.get_request(author, 'post', new_data, '/demo/{}'.format('?ajax=1' if ajax else ''))
+        request = self.get_request(author, 'post', new_data, '/demo/{0}'.format('?ajax=1' if ajax else ''))
         response = SaveComment.as_view()(request)
         return response
 
