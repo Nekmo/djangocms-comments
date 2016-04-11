@@ -237,7 +237,7 @@ platforms_classifiers = {'linux': ('POSIX', 'Linux'), 'win': ('Microsoft', 'Wind
 for key, parts in platforms_classifiers.items():
     if not key in PLATFORMS:
         continue
-    CLASSIFIERS.append('Operating System :: {}'.format(' :: '.join(parts)))
+    CLASSIFIERS.append('Operating System :: {0}'.format(' :: '.join(parts)))
 
 
 # Añadir la versión de Python a los Classifiers
@@ -252,7 +252,7 @@ for version in PYTHON_VERSIONS:
     if '-' in version:
         version = version.split('-')
         if len(version) != 2:
-            raise ValueError('Invalid Python version range: {}'.format('-'.join(version)))
+            raise ValueError('Invalid Python version range: {0}'.format('-'.join(version)))
         version = list(map(float, version))
         version[1] += 0.1  # Para que frange incluya la última versión
         python_versions.extend(frange(version[0], version[1], 0.1))
@@ -284,8 +284,8 @@ setup(
     url=URL,
 
     classifiers=CLASSIFIERS.extend([
-        'Natural Language :: {}'.format(NATURAL_LANGUAGE),
-        'Development Status :: {} - {}'.format(STATUS_LEVEL, status_name),
+        'Natural Language :: {0}'.format(NATURAL_LANGUAGE),
+        'Development Status :: {0} - {1}'.format(STATUS_LEVEL, status_name),
     ]),
 
     platforms=PLATFORMS,
