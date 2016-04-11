@@ -7,8 +7,6 @@ python:
   # maintainers to fix their pypy-dev package.
   - "pypy"
 # command to install dependencies
-before_install:
-  - PYTHONPATH=::$PWD
 install:
   - pip install -r demo/requirements.txt
 # command to run tests
