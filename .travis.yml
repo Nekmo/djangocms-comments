@@ -1,19 +1,77 @@
 language: python
+
+sudo: false
+
 python:
+  - "2.6"
   - "2.7"
+  - "3.3"
   - "3.4"
   - "3.5"
   # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
   # maintainers to fix their pypy-dev package.
   # - "pypy"
 # command to install dependencies
+env:
+  matrix:
+  - TOXENV='pep8'
+  - DJANGO='django19' CMS='cms32'
+  - DJANGO='django18' CMS='cms32'
+  - DJANGO='django18' CMS='cms31'
+  - DJANGO='django17' CMS='cms32'
+  - DJANGO='django17' CMS='cms31'
+  - DJANGO='django17' CMS='cms30'
+  - DJANGO='django16' CMS='cms32'
+  - DJANGO='django16' CMS='cms31'
+  - DJANGO='django16' CMS='cms30'
+
 before_install:
   - pip install codecov
+
 install:
-  - pip install -r demo/requirements.txt
-# command to run tests
-before_script:
-  - python demo/manage.py migrate
-script: python demo/manage.py test djangocms_comments
-after_success:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PYVER=py26; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
+  - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi"
+
+script: COMMAND='coverage run' tox -e$TOXENVafter_success:
   - codecov
+
+matrix:
+  exclude:
+  - python: 2.6
+    env: TOXENV='pep8'
+  - python: 2.7
+    env: TOXENV='pep8'
+  - python: 2.7
+    env: TOXENV='pep8'
+  - python: 3.3
+    env: TOXENV='pep8'
+  - python: 3.4
+    env: DJANGO='django17' CMS='cms30'
+  - python: 2.6
+    env: DJANGO='django17' CMS='cms31'
+  - python: 2.6
+    env: DJANGO='django17' CMS='cms32'
+  - python: 2.6
+    env: DJANGO='django18' CMS='cms31'
+  - python: 2.6
+    env: DJANGO='django18' CMS='cms32'
+  - python: 2.6
+    env: DJANGO='django19' CMS='cms32'
+  - python: 3.3
+    env: DJANGO='django19' CMS='cms32'
+  - python: 3.5
+    env: DJANGO='django16' CMS='cms30'
+  - python: 3.5
+    env: DJANGO='django16' CMS='cms31'
+  - python: 3.5
+    env: DJANGO='django16' CMS='cms32'
+  - python: 3.5
+    env: DJANGO='django17' CMS='cms30'
+  - python: 3.5
+    env: DJANGO='django17' CMS='cms31'
+  - python: 3.5
+    env: DJANGO='django17' CMS='cms32'

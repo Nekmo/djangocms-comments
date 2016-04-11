@@ -1,4 +1,4 @@
-Django==1.9.5
+# Django==1.9.5
 django-classy-tags==0.7.2
 django-cms==3.2.3
 django-formtools==1.0
