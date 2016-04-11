@@ -3,11 +3,12 @@ language: python
 sudo: false
 
 python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
   - "3.5"
+  - "3.4"
+  - "3.3"
+  - "2.7"
+  - "2.6"
+
   # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
   # maintainers to fix their pypy-dev package.
   # - "pypy"
@@ -27,7 +28,7 @@ env:
   - DJANGO='django16' CMS='cms30'
 
 before_install:
-  - pip install codecov
+  - pip install codecov tox>=1.8
 
 install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PYVER=py26; fi"
