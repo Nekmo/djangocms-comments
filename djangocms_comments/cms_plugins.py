@@ -17,7 +17,7 @@ class CommentsPlugin(CMSPluginBase):
         obj = context['object']
         request = context['request']
         ct = ContentType.objects.get_for_model(obj)
-        context['comments'] = self.get_comments(ct, obj, request)
+        context['comments'] = self.get_comments(request, obj, ct)
         initial = {
             'config_id': instance.config.pk,
             'page_type': ct.pk,
@@ -27,7 +27,9 @@ class CommentsPlugin(CMSPluginBase):
         context['is_user'] = get_is_user(request)
         return super(CommentsPlugin, self).render(context, instance, placeholder)
 
-    def get_comments(self, ct, obj, request):
+    @staticmethod
+    def get_comments(request, obj, ct=None):
+        ct = ct or ContentType.objects.get_for_model(obj)
         comments = Comment.objects.filter(page_type=ct, page_id=obj.pk)
         if not getattr(request.user, 'is_staff', False):
             comments = comments.filter(published=True)

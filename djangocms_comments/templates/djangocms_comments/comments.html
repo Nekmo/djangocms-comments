@@ -1,0 +1,21 @@
+{% load staticfiles sekizai_tags cms_tags %}
+{% addtoblock "js" %}
+<script src="{% static 'djangocms_comments/js/autosize.min.js' %}"></script>
+<script src="{% static 'djangocms_comments/js/md5.min.js' %}"></script>
+<script src="{% static 'djangocms_comments/js/comments.js' %}"></script>
+{% endaddtoblock %}
+{% addtoblock "css" %}
+<link rel="stylesheet" href="{% static 'djangocms_comments/css/comments.css' %}">
+{% endaddtoblock %}
+
+<div class="comments-and-box-plugin">
+    <h2>Comments</h2>
+    <div class="comments-list">
+        {% for comment in comments.all %}
+            {% render_model_block comment %}
+                {% include "djangocms_comments/comment.html" %}
+            {% endrender_model_block%}
+        {% endfor %}
+    </div>
+    {% include "djangocms_comments/comment_box.html" %}
+</div>

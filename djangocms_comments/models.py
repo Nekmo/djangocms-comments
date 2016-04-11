@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from cms.models.pluginmodel import CMSPlugin
@@ -44,19 +44,6 @@ class CommentsCMSPlugin(CMSPlugin):
         self.config = old_instance.config
 
 
-
-class AnonymousAuthor(models.Model):
-    username = models.CharField(max_length=32)
-    email = models.EmailField()
-    website = models.URLField(blank=True)
-
-    def __str__(self):
-        return self.username
-
-    def __unicode__(self):
-        return self.username
-
-
 class Comment(models.Model):
     config = models.ForeignKey(CommentsConfig)
 
@@ -92,6 +79,20 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.__str__()
+
+
+class AnonymousAuthor(models.Model):
+    username = models.CharField(max_length=32)
+    email = models.EmailField()
+    website = models.URLField(blank=True)
+    comments = GenericRelation(Comment, object_id_field='author_id', content_type_field='author_type',
+                               related_query_name='anonymous_authors')
+
+    def __str__(self):
+        return self.username
+
+    def __unicode__(self):
+        return self.username
 
 
 class Comments(CommentsCMSPlugin):

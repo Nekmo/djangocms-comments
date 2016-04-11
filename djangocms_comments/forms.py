@@ -18,6 +18,7 @@ def get_client_ip(request):
         ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
+    print(ip)
     return ip
 
 
@@ -39,8 +40,9 @@ class CommentForm(ModelForm):
 
     def security_validations(self):
         if Comment.objects.filter(user_ip=get_client_ip(self.request),
-                                  created_at__gte=datetime.datetime.now() + datetime.timedelta(
-                                      seconds=settings.COMMENT_WAIT_SECONDS)).count() and settings.COMMENT_WAIT_SECONDS:
+                                  created_at__lte=datetime.datetime.now() + datetime.timedelta(
+                                     seconds=settings.COMMENT_WAIT_SECONDS)).count() \
+                                  and settings.COMMENT_WAIT_SECONDS and not getattr(self.request, 'is_test', False):
             raise ValidationError(_('You must wait to post a new comment.'))
 
     def clean(self):
