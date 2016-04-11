@@ -1,5 +1,10 @@
 .. image:: https://img.shields.io/travis/Nekmo/djangocms-comments.svg?maxAge=2592000
   :target: https://travis-ci.org/Nekmo/djangocms-comments
+  :alt: Latest Travis CI build status
+
+.. image:: https://codeclimate.com/github/Nekmo/djangocms-comments/badges/gpa.svg
+  :target: https://codeclimate.com/github/Nekmo/djangocms-comments
+  :alt: Code Climate
 
 DjangoCMS Comments
 ==================
