@@ -7,9 +7,13 @@ python:
   # maintainers to fix their pypy-dev package.
   - "pypy"
 # command to install dependencies
+before_install:
+  - pip install codecov
 install:
   - pip install -r demo/requirements.txt
 # command to run tests
 before_script:
   - python demo/manage.py migrate
 script: python demo/manage.py test djangocms_comments
+after_success:
+  - codecov
