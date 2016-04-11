@@ -12,6 +12,7 @@ python:
   # maintainers to fix their pypy-dev package.
   # - "pypy"
 # command to install dependencies
+
 env:
   matrix:
   - TOXENV='pep8'
@@ -36,7 +37,9 @@ install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
   - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi"
 
-script: COMMAND='coverage run' tox -e$TOXENVafter_success:
+script: COMMAND='coverage run' tox -e$TOXENV
+
+after_success:
   - codecov
 
 matrix:
