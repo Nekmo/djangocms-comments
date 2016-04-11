@@ -22,8 +22,8 @@ class TestBase(object):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         self.anonymous = AnonymousUser()
-        self.staff_user = get_user_model().objects.create_user(
-            username='arthur', email='arthur@nekmo.com', password='grail', is_staff=True)
+        self.staff_user = get_user_model().objects.create_superuser(
+            username='arthur', email='arthur@nekmo.com', password='grail')
         self.normal_user = get_user_model().objects.create_user(
             username='lancelot', email='lancelot@nekmo.com', password='grail')
         self.config = CommentsConfig.objects.create()
