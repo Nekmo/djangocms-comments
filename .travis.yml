@@ -3,11 +3,11 @@ language: python
 sudo: false
 
 python:
-  - "3.5"
-  - "3.4"
-  - "3.3"
-  - "2.7"
-  - "2.6"
+  - 3.5
+  - 3.4
+  - 3.3
+  - 2.7
+  - 2.6
 
   # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
   # maintainers to fix their pypy-dev package.
