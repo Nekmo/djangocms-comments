@@ -87,6 +87,16 @@ Settings
 You can overwrite the following options in your settings file:
 https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/settings.py
 
+TODO
+====
+- Akismet Support.
+- Social authentication (Twitter, Google, Facebook, Github...).
+- Reply comments.
+- Rich text.
+- Options for authentication methods (disable anonymous...).
+- Send notifications to admins (new comment, moderation required...).
+- Sending messages to users (new answers, reply to my comment...).
+
 Contribute
 ==========
 Please feel free to send a pull request. All suggestions are welcome.
