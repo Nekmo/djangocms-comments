@@ -56,8 +56,8 @@ Configuration
 First you need to add ``djangocms_comments`` to your INSTALLED_APPS::
 
   INSTALLED_APPS = [
-    # ...
-    'djangocms_comments',
+      # ...
+      'djangocms_comments',
   ]
 
 Now run migrations::
@@ -67,7 +67,7 @@ Now run migrations::
 Add to your urlpatterns::
 
   urlpatterns = [
-    url(r'^djangocms_comments/', include('djangocms_comments.urls')),
+      url(r'^djangocms_comments/', include('djangocms_comments.urls')),
   ]
 
 That's all!
@@ -79,12 +79,12 @@ DjangoCMS-Comments includes a plugin. Add the plugin to a page, preferably in a 
 The first time you add a plugin, you need to create a new configuration. You can create different configurations
 for separate different comments lists on the same page.
 
-For example, you has a blog with two languages. The posts are translated (the id is the same) and you need separate
-comments. The solution is to create a plugin for each language with a different configuration.
+**For example, you have a blog with two languages. The posts are translated (the id is the same) and you need separate
+comments. The solution is to create a plugin for each language with a different configuration.**
 
 Comments will be associated to the instance in the page. That instance is necessary.
 
-To make the relationship, DjangoCMS-Comments uses a GenericForeignKey. If the primary key is not an integer, the
+To make the relationship, DjangoCMS-Comments uses a ``GenericForeignKey``. If the primary key is not an integer, the
 relationship will not work! However, this is not usual.
 
 Settings
@@ -92,6 +92,16 @@ Settings
 You can overwrite the following options in your settings file:
 
 https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/settings.py
+
+TODO
+====
+- Akismet Support.
+- Social authentication (Twitter, Google, Facebook, Github...).
+- Reply comments.
+- Rich text.
+- Options for authentication methods (disable anonymous...).
+- Send notifications to admins (new comment, moderation required...).
+- Sending messages to users (new answers, reply to my comment...).
 
 Contribute
 ==========
