@@ -40,7 +40,7 @@ class CommentForm(ModelForm):
 
     def security_validations(self):
         if Comment.objects.filter(user_ip=get_client_ip(self.request),
-                                  created_at__lte=datetime.datetime.now() + datetime.timedelta(
+                                  created_at__gte=datetime.datetime.now() - datetime.timedelta(
                                       seconds=settings.COMMENT_WAIT_SECONDS)).count() \
                 and settings.COMMENT_WAIT_SECONDS and not getattr(self.request, 'is_test', False):
             raise ValidationError(_('You must wait to post a new comment.'))

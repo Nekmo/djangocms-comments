@@ -17,6 +17,8 @@ class TestBase(object):
     normal_user = None
     config = None
     obj = None
+    plugin_model_instance = None
+    plugin_instance = None
 
     def setUp(self):
         # Every test needs access to the request factory.
@@ -40,20 +42,22 @@ class TestBase(object):
         obj = obj or self.obj
         return dict(page_id=obj.pk, page_type=ContentType.objects.get_for_model(obj))
 
-    def get_request(self, user, method='get', data=None, url='/demo', is_test=True):
+    def get_request(self, user, method='get', data=None, url='/demo', is_test=True, ip=None):
         data = data or {}  # Django 1.6 support
         request = getattr(self.factory, method)(url, data)
         request.user = user or self.anonymous
         request.is_test = is_test
+        request.META['REMOTE_ADDR'] = ip or '127.0.0.1'
         return request
 
-    def send_comment(self, author=None, body='', data=None, ajax=True):
+    def send_comment(self, author=None, body='', data=None, ajax=True, is_test=True, ip=None):
         author = author or self.normal_user
         form = self.render_context_plugin(user=author)['form']
         new_data = {'body': body}
         new_data.update(self.get_sign_values(form))
         new_data.update(data or {})
-        request = self.get_request(author, 'post', new_data, '/demo/{0}'.format('?ajax=1' if ajax else ''))
+        request = self.get_request(author, 'post', new_data, '/demo/{0}'.format('?ajax=1' if ajax else ''),
+                                   is_test=is_test, ip=ip)
         response = SaveComment.as_view()(request)
         return response
 

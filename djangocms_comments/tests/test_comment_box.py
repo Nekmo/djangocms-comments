@@ -11,7 +11,6 @@ from djangocms_comments.models import Comment
 from djangocms_comments.views import SaveComment
 from .base import TestBase
 
-
 PATSY_BODY = """Sir Lancelot: Look, my liege!
 King Arthur: [awed] Camelot!
 Sir Galahad: Camelot!
@@ -20,7 +19,6 @@ Sir Lancelot: Camelot!
 
 
 class CommentsListFilter(TestBase, TestCase):
-
     def test_context_has_form(self):
         self.assertIn('form', self.render_context_plugin())
 
@@ -108,12 +106,14 @@ class CommentsListFilter(TestBase, TestCase):
 
     def test_comment_wait_seconds(self):
         author = self.normal_user
-        self.send_comment(author, body="Listen. Strange women lying in ponds distributing swords is no basis "
-                                       "for a system of government. Supreme executive power derives from a "
-                                       "mandate from the masses, not from some farcical aquatic ceremony.")
+        ip = '192.168.1.1'
+        self.send_comment(author, ip=ip, is_test=False,
+                          body="Listen. Strange women lying in ponds distributing swords is no basis "
+                               "for a system of government. Supreme executive power derives from a "
+                               "mandate from the masses, not from some farcical aquatic ceremony.")
         new_data = {'body': "You can't expect to wield supreme power just"
                             "'cause some watery tart threw a sword at you! " * 4}
         new_data.update(self.get_sign_values())
-        request = self.get_request(author, 'post', new_data, '/demo/?ajax=1', is_test=False)
+        request = self.get_request(author, 'post', new_data, '/demo/?ajax=1', is_test=False, ip=ip)
         response = SaveComment.as_view()(request)
         self.assertEqual(len(response.context_data['form'].errors), 1)
