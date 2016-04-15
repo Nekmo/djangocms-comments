@@ -61,6 +61,7 @@ PLATFORMS = [
 ]
 ROOT_INCLUDE = ['requirements.txt', 'VERSION', 'LICENSE.txt']
 PYTHON_VERSIONS = ['2.6-2.7', '3.3-3.5']  # or ranges: 3.1-3.5, 2.6-3.4...
+INSTALL_REQUIRES = []  # Necesario si no hay un requirements.txt
 
 ######## FIN DE LA CONFIGURACIÓN DEL PAQUTE ########
 
@@ -183,7 +184,7 @@ if os.path.exists(requirements_path):
     install_requires = [str(ir.req) for ir in requirements]
     dependency_links = [get_url(ir) for ir in requirements if get_url(ir)]
 else:
-    install_requires = []
+    install_requires = INSTALL_REQUIRES
     dependency_links = []
 
 # Todos los módulos y submódulos a instalar (module, module.submodule, module.submodule2...)

@@ -20,6 +20,7 @@ MODERATED = [
 REQUIRES_ATTENTION = [
     ('spam', _('Spam')),
     ('edited', _('Edited')),
+    ('created', _('Created')),
 ]
 
 

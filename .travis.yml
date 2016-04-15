@@ -1,19 +1,11 @@
 language: python
-
 sudo: false
-
 python:
-  - 3.5
-  - 3.4
-  - 3.3
-  - 2.7
-  - 2.6
-
-  # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
-  # maintainers to fix their pypy-dev package.
-  # - "pypy"
-# command to install dependencies
-
+- 3.5
+- 3.4
+- 3.3
+- 2.7
+- 2.6
 env:
   matrix:
   - TOXENV='pep8'
@@ -26,23 +18,18 @@ env:
   - DJANGO='django16' CMS='cms32'
   - DJANGO='django16' CMS='cms31'
   - DJANGO='django16' CMS='cms30'
-
 before_install:
-  - pip install codecov tox>=1.8
-
+- pip install codecov tox>=1.8
 install:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PYVER=py26; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
-  - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi"
-
+- if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PYVER=py26; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi
+- if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi
+- if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi
 script: COMMAND='coverage run' tox -e$TOXENV
-
 after_success:
-  - codecov
-
+- codecov
 matrix:
   exclude:
   - python: 2.6
@@ -81,3 +68,12 @@ matrix:
     env: DJANGO='django17' CMS='cms31'
   - python: 3.5
     env: DJANGO='django17' CMS='cms32'
+deploy:
+  provider: pypi
+  user: nekmo
+  password:
+    secure: GOC9TIfJEc+hC9uyT9K8ir1zua19Dg0txGdhhJF72TFUpNpvtS6i1HseF6qj+KxOkedD6T7Q49xllxGgdF8uKK1YDoWjt2Fqxvtm56DO844QbSunTMEQUAC2kiwOZyG2pBVsiJ/IlanWAH9lx5PsRGKtcdDZa2MpLm/w2OUwiYoMiwzGcxa/kktZjQpRs13NDOy8NJAozmcUZZPrXKV67egfPJYVcqDd7RE+M179o16JGCumUUYPVo0qY4daKSsJBLcxZqZEX7jth9VqbWzMZfLkY+CGTfdcgycjsi5G6zAIWoiP9OaoF0xPtPjr/FmzXmjlxkoCWvG+K7ZlNyGjOu97NOKKn0ilXN0nXDCTx1ZM31u07p+MlZ86FiZUOkDZVI0hT5xtUQHsIzfGrIHjpXMs3xPyYuvVpS1hiyOc+RqO0N25Iuv6cGhG0PK+Wj3eFX/MUQw9d4gY04FOg7V/Wk5cor//doFgO/y4C2OwFmVYfDjk3yxnoORJjtAB0maoy07xaAt/uAV738olji64lX6R0lLM2W6zzb+CadrsLsc2cE25SCQe1OfyW/wVM9vXDIzMWC7toPtGvU97QtPXEbhChgb78+lOeDVUXCPlVKPVrswh2CSr6nQ5DjnQr/kRkBH7r63rBIIQrPyjtGsaDBoYRI7EpXA9yyucKiux6kM=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: Nekmo/djangocms-comments

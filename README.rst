@@ -18,6 +18,10 @@
   :target: https://codecov.io/github/Nekmo/djangocms-comments
   :alt: Test coverage
 
+.. image:: https://img.shields.io/requires/github/Nekmo/djangocms-comments.svg?style=flat-square
+     :target: https://requires.io/github/Nekmo/djangocms-comments/requirements/?branch=master
+     :alt: Requirements Status
+
 DjangoCMS Comments
 ==================
 A comment system for Django CMS unintrusive and easy to use.
@@ -44,6 +48,7 @@ You can install DjangoCMS-Comments From **Pypi**::
   python setup.py install
 
 You can also install it from **Aldryn cloud**:
+
 https://marketplace.django-cms.org/en/addons/browse/djangocms-comments/
 
 Configuration
@@ -75,7 +80,7 @@ The first time you add a plugin, you need to create a new configuration. You can
 for separate different comments lists on the same page.
 
 For example, you has a blog with two languages. The posts are translated (the id is the same) and you need separate
- comments. The solution is to create a plugin for each language with a different configuration.
+comments. The solution is to create a plugin for each language with a different configuration.
 
 Comments will be associated to the instance in the page. That instance is necessary.
 
@@ -85,6 +90,7 @@ relationship will not work! However, this is not usual.
 Settings
 ========
 You can overwrite the following options in your settings file:
+
 https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/settings.py
 
 Contribute

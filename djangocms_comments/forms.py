@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments import settings
 from djangocms_comments.models import AnonymousAuthor, CommentsConfig
+from djangocms_comments.spam import get_spam_protection
 from djangocms_comments.widgets import SignedHiddenInput
 from .models import Comment
 
@@ -40,8 +41,8 @@ class CommentForm(ModelForm):
     def security_validations(self):
         if Comment.objects.filter(user_ip=get_client_ip(self.request),
                                   created_at__lte=datetime.datetime.now() + datetime.timedelta(
-                                     seconds=settings.COMMENT_WAIT_SECONDS)).count() \
-                                  and settings.COMMENT_WAIT_SECONDS and not getattr(self.request, 'is_test', False):
+                                      seconds=settings.COMMENT_WAIT_SECONDS)).count() \
+                and settings.COMMENT_WAIT_SECONDS and not getattr(self.request, 'is_test', False):
             raise ValidationError(_('You must wait to post a new comment.'))
 
     def clean(self):
@@ -62,16 +63,26 @@ class CommentForm(ModelForm):
 
     def save(self, commit=True, author=None):
         author = author or self.request.user
+        user_agent = self.request.META.get('HTTP_USER_AGENT', 'unknown')
+        referrer = self.request.META.get('HTTP_REFERER', '')
+        user_ip = get_client_ip(self.request)
         published = settings.COMMENT_PUBLISHED_BY_DEFAULT
+        is_spam = False
         if is_staff(self.request):
             # Always published for admins
             published = True
-        comment = Comment(author=author, user_ip=get_client_ip(self.request),
+        else:
+            is_spam = get_spam_protection().check(author, author.email, self.cleaned_data['body'], user_ip, user_agent,
+                                                  url=getattr(author, 'website', None), referrer='unknown',
+                                                  blog_domain=self.request.get_host())
+            published = published and not is_spam
+        comment = Comment(author=author, user_ip=user_ip, user_agent=user_agent, referrer=referrer, published=published,
                           config=CommentsConfig.objects.get(pk=self.cleaned_data['config_id']),
-                          user_agent=self.request.META.get('HTTP_USER_AGENT', 'unknown'),
-                          referrer=self.request.META.get('HTTP_REFERER', ''),
-                          published=published,
                           **dict((key, self.cleaned_data[key]) for key in ['body', 'page_id', 'page_type']))
+        if is_spam:
+            comment.requires_attention = 'spam'
+        elif not published:
+            comment.requires_attention = 'created'
         if commit:
             comment.save()
         return comment
@@ -100,13 +111,13 @@ class UnregisteredCommentForm(CommentForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if settings.COMMENT_PREVENT_USURP_USERNAME and  get_user_model().objects.filter(username=username).count():
+        if settings.COMMENT_PREVENT_USURP_USERNAME and get_user_model().objects.filter(username=username).count():
             raise ValidationError(_('The chosen username belongs to a registered user.'))
         return username
 
     def save(self, commit=True, author=None):
         author, exists = AnonymousAuthor.objects.get_or_create(**dict((key, self.cleaned_data[key]) for key in
-                                                                ['username', 'email', 'website']))
+                                                                      ['username', 'email', 'website']))
         if not exists:
             author.save()
         return super(UnregisteredCommentForm, self).save(commit=commit, author=author)

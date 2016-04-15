@@ -1,7 +1,7 @@
 from django.conf import settings
 
 COMMENT_PUBLISHED_BY_DEFAULT = True
-AKISMET_API_KEY = ''
+SPAM_PROTECTION = {}  # {'default': {'BACKEND': 'djangocms_comments.spam.Akismet', 'TOKEN': '...'}}
 MIN_LENGTH_COMMENT_BODY = 50
 MAX_LENGTH_COMMENT_BODY = 12000
 MAX_BREAKLINES_COMMENT_BODY = 12
