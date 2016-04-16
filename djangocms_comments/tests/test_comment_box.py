@@ -52,8 +52,10 @@ class CommentsListFilter(TestBase, TestCase):
         response = self.send_comment(self.normal_user, body)
         self.assertFalse(response.context_data['form'].errors)
         self.assertFalse(response.context_data['form'].is_bound)
-        self.assertEqual(Comment.objects.filter(config=self.config, body=body,
-                                                **self.get_page_ct_id()).count(), 1)
+        try:
+            Comment.objects.get(config=self.config, body=body, **self.get_page_ct_id())
+        except Comment.DoesNotExist:
+            self.fail('The comment has not been created')
 
     def test_body_len_validation(self):
         # Min
@@ -84,15 +86,15 @@ class CommentsListFilter(TestBase, TestCase):
         body = 'test_anonymous_form_error ' * 100
         response = self.send_comment(self.anonymous, body=body)
         self.assertEqual(len(response.context_data['form'].errors), 2)  # Username, email
-        self.assertEqual(Comment.objects.filter(config=self.config, body=body,
-                                                **self.get_page_ct_id()).count(), 0)
+        with self.assertRaises(Comment.DoesNotExist):
+            Comment.objects.get(config=self.config, body=body,**self.get_page_ct_id())
 
     def test_user_form_error(self):
         body = ''  # Empty comment is not allowed
         response = self.send_comment(self.normal_user, body=body)
         self.assertEqual(len(response.context_data['form'].errors), 1)  # Comment is required
-        self.assertEqual(Comment.objects.filter(config=self.config, body=body,
-                                                **self.get_page_ct_id()).count(), 0)
+        with self.assertRaises(Comment.DoesNotExist):
+            Comment.objects.get(config=self.config, body=body, **self.get_page_ct_id())
 
     def test_sign_validation(self):
         signed_values = self.get_sign_values(self.render_context_plugin()['form'])
