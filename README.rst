@@ -51,6 +51,17 @@ You can also install it from **Aldryn cloud**:
 
 https://marketplace.django-cms.org/en/addons/browse/djangocms-comments/
 
+Optional depends
+----------------
+
+* **user-agents==1.0.1**: Improved description of user agent in the comments.
+* **pykismet3==0.1.1**: Akismet support.
+
+All optional depends::
+
+  pip install user-agents==1.0.1 pykismet3==0.1.1
+
+
 Configuration
 =============
 First you need to add ``djangocms_comments`` to your INSTALLED_APPS::
@@ -71,6 +82,23 @@ Add to your urlpatterns::
   ]
 
 That's all!
+
+Optional: Akismet support
+-------------------------
+
+#. Install pykismet3 (It works in python2):: ``pip install pykismet3==0.1.1``.
+#. Create an account and get a API KEY: https://akismet.com/ (You don't need to pay)
+#. Add to your settings:
+
+.. highlight:: python
+
+  SPAM_PROTECTION = {
+      'default': {
+          'BACKEND': 'djangocms_comments.spam.Akismet',
+          'TOKEN': '1ba29d6f120c',
+      },
+  }
+
 
 Usage
 =====
@@ -95,7 +123,7 @@ https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/setti
 
 TODO
 ====
-- Akismet Support.
+- --Akismet Support.--
 - Social authentication (Twitter, Google, Facebook, Github...).
 - Reply comments.
 - Rich text.

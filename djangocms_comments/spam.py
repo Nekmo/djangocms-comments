@@ -25,7 +25,7 @@ class SpamProtection(object):
 
 
 class Akismet(SpamProtection):
-    user_agent = 'djangocms-comments/{}'.format(djangocms_comments.__version__)
+    user_agent = 'djangocms-comments/{0}'.format(djangocms_comments.__version__)
 
     def __init__(self, token, is_test=False, blog_domain=None):
         super(Akismet, self).__init__(token, is_test, blog_domain)
