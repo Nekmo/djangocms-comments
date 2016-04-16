@@ -86,11 +86,11 @@ That's all!
 Optional: Akismet support
 -------------------------
 
-#. Install pykismet3 (It works in python2):: ``pip install pykismet3==0.1.1``.
+#. Install python-akismet: ``pip install python-akismet>=0.2.1``.
 #. Create an account and get a API KEY: https://akismet.com/ (You don't need to pay)
 #. Add to your settings:
 
-.. highlight:: python
+.. code-block:: python
 
   SPAM_PROTECTION = {
       'default': {
@@ -123,7 +123,7 @@ https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/setti
 
 TODO
 ====
-- --Akismet Support.--
+- :strike:`Akismet Support.`
 - Social authentication (Twitter, Google, Facebook, Github...).
 - Reply comments.
 - Rich text.

@@ -29,24 +29,24 @@ class Akismet(SpamProtection):
 
     def __init__(self, token, is_test=False, blog_domain=None):
         super(Akismet, self).__init__(token, is_test, blog_domain)
-        import pykismet3
-        self.akismet = pykismet3.Akismet(token, user_agent=self.user_agent)
+        from akismet import Akismet as PyAkismet
+        self.akismet = PyAkismet(token, application_user_agent=self.user_agent)
 
     def get_parameters(self, data):
         return dict(
             blog=self.blog_domain or data['blog_domain'],
             comment_author=data['author'],
-            comment_email=data['email'],
-            comment_url=data['url'],
+            comment_author_email=data['email'],
+            comment_author_url=data['url'],
             comment_content=data['body'],
             is_test=self.is_test,
             **dict((key, data[key]) for key in ['user_ip', 'user_agent', 'referrer']))
 
     def check(self, author, email, body, user_ip, user_agent, url=None, referrer='unknown', blog_domain=None):
-        return self.akismet.check(self.get_parameters(locals()))
+        return self.akismet.check(**self.get_parameters(locals()))
 
     def report(self, is_spam, author, email, body, user_ip, user_agent, url=None, referrer='unknown', blog_domain=None):
-        return self.akismet.submit('spam' if is_spam else 'ham', self.get_parameters(locals()))
+        return self.akismet.submit(is_spam, **self.get_parameters(locals()))
 
 
 class FakeSpamProtection(SpamProtection):
