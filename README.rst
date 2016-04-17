@@ -56,10 +56,11 @@ Optional depends
 
 * **user-agents==1.0.1**: Improved description of user agent in the comments.
 * **pykismet3==0.1.1**: Akismet support.
+* **aldryn-boilerplates>=0.7.4**: Bootstrap3 theme.
 
 All optional depends::
 
-  pip install user-agents==1.0.1 pykismet3==0.1.1
+  pip install user-agents==1.0.1 pykismet3==0.1.1 aldryn-boilerplates>=0.7.4
 
 
 Configuration
@@ -99,6 +100,11 @@ Optional: Akismet support
       },
   }
 
+Optional: Bootstrap3 theme usign Aldryn Boilerplates
+----------------------------------------------------
+
+#. Install aldryn-boilerplates: ``pip install aldryn-boilerplates>=0.7.4``.
+#. Configure Aldryn Boilerplates: https://github.com/aldryn/aldryn-boilerplates
 
 Usage
 =====
