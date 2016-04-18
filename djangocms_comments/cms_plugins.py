@@ -8,13 +8,17 @@ from djangocms_comments.views import get_form_class, get_is_user
 from .models import Comments, Comment
 
 
+def get_object_from_context(context):
+    return context.get('object') or context['current_page']
+
+
 class CommentsPlugin(CMSPluginBase):
     model = Comments
     render_template = "djangocms_comments/comments.html"
     cache = False
 
     def render(self, context, instance, placeholder):
-        obj = context['object']
+        obj = get_object_from_context(context)
         request = context['request']
         ct = ContentType.objects.get_for_model(obj)
         context['comments'] = self.get_comments(request, obj, ct)
