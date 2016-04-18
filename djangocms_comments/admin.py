@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.forms import ModelForm, ChoiceField
 from django.template.defaultfilters import truncatechars
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments.models import AnonymousAuthor
@@ -38,6 +39,7 @@ class CommentAdminForm(ModelForm):
 class CommentAdmin(admin.ModelAdmin):
     change_form_template = 'djangocms_comments/comment-admin-info.html'
     form = CommentAdminForm
+    list_display = ('body_print', 'requires_attention_print', 'author', 'page')
 
     fieldsets = (
         (None, {
@@ -56,6 +58,18 @@ class CommentAdmin(admin.ModelAdmin):
             extra_context['user_agent'] = get_user_agent(comment.user_agent) or truncatechars(comment.user_agent, 60)
         return super(CommentAdmin, self).changeform_view(request, object_id=object_id, form_url=form_url,
                                                          extra_context=extra_context)
+
+    def requires_attention_print(self, obj):
+        if not obj.requires_attention:
+            return ''
+        return mark_safe('<span class="label label-{1}">{0}</span>'.format(
+            obj.requires_attention, {'spam': 'danger', 'edited': 'info'}.get(obj.requires_attention, 'default')
+        ))
+    requires_attention_print.short_description = _('Unread')
+
+    def body_print(cls, obj):
+        return truncatechars(obj.body, 80)
+    body_print.short_description = _('Comment')
 
     def has_add_permission(self, request):
         return False
