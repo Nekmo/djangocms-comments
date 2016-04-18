@@ -1,5 +1,6 @@
 import math
 
+import cms
 import django
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import SuspiciousOperation
@@ -119,3 +120,13 @@ class CommentsListFilter(TestBase, TestCase):
         request = self.get_request(author, 'post', new_data, '/demo/?ajax=1', is_test=False, ip=ip)
         response = SaveComment.as_view()(request)
         self.assertEqual(len(response.context_data['form'].errors), 1)
+
+    def test_comment_in_page(self):
+        body = 'CommentsListFilter.test_comment_in_page test.' + ('This is a test!' * 8)
+        page = cms.api.create_page('Test', 'fullwidth.html', 'en')
+        response = self.send_comment(self.normal_user, body, obj=page)
+        self.assertEqual(len(response.context_data['form'].errors), 0)
+        try:
+            Comment.objects.get(config=self.config, body=body)
+        except Comment.DoesNotExist:
+            self.fail('The comment has not been created')

@@ -50,9 +50,9 @@ class TestBase(object):
         request.META['REMOTE_ADDR'] = ip or '127.0.0.1'
         return request
 
-    def send_comment(self, author=None, body='', data=None, ajax=True, is_test=True, ip=None):
+    def send_comment(self, author=None, body='', data=None, ajax=True, is_test=True, ip=None, obj=None):
         author = author or self.normal_user
-        form = self.render_context_plugin(user=author)['form']
+        form = self.render_context_plugin(user=author, obj=obj)['form']
         new_data = {'body': body}
         new_data.update(self.get_sign_values(form))
         new_data.update(data or {})
