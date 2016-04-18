@@ -43,11 +43,12 @@ class CommentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('published', 'body', 'moderated', 'moderated_reason', 'requires_attention')
+            'fields': ('published', 'body', 'moderated_reason')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('config', ('page_type', 'page_id'), ('author_type', 'author_id')),
+            'fields': (('moderated', 'requires_attention'), 'config', ('page_type', 'page_id'),
+                       ('author_type', 'author_id')),
         }),
     )
 
@@ -56,6 +57,8 @@ class CommentAdmin(admin.ModelAdmin):
         comment = self.get_object(request, unquote(object_id))
         if comment is not None:
             extra_context['user_agent'] = get_user_agent(comment.user_agent) or truncatechars(comment.user_agent, 60)
+            comment.requires_attention = ''
+            comment.save()
         return super(CommentAdmin, self).changeform_view(request, object_id=object_id, form_url=form_url,
                                                          extra_context=extra_context)
 
@@ -67,7 +70,7 @@ class CommentAdmin(admin.ModelAdmin):
         ))
     requires_attention_print.short_description = _('Unread')
 
-    def body_print(cls, obj):
+    def body_print(self, obj):
         return truncatechars(obj.body, 80)
     body_print.short_description = _('Comment')
 
