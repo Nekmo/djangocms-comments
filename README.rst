@@ -22,6 +22,9 @@
      :target: https://requires.io/github/Nekmo/djangocms-comments/requirements/?branch=master
      :alt: Requirements Status
 
+.. role:: strike
+    :class: strike
+
 DjangoCMS Comments
 ==================
 A comment system for Django CMS unintrusive and easy to use.
