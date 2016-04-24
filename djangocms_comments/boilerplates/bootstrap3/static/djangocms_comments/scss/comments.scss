@@ -54,4 +54,9 @@
         padding-bottom: $avatar-padding;
         padding-right: $avatar-padding;
     }
+
+    .dynamic-gravatar {
+        width: 100%;
+        max-width: 150px;
+    }
 }

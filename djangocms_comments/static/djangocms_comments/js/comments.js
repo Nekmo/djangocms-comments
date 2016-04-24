@@ -5,6 +5,13 @@ $(function () {
         autosize(cbs[i].getElementsByTagName('textarea')[0]);
     }
 
+    $('#id_email').keyup(function(ev){
+        var commentBox = ev.currentTarget.closest('.comment-box');
+        var img = $(commentBox).find('.dynamic-gravatar');
+        console.debug(ev.currentTarget.value);
+        $(img).attr('src', 'http://www.gravatar.com/avatar/' + md5(ev.currentTarget.value) + '?s=150&d=identicon');
+    });
+
     $('form.comment-box-form').submit(function (ev) {
         var commentBox = ev.currentTarget;
         var url = $(commentBox).attr('action') + '?ajax=1';
