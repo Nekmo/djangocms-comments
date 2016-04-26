@@ -1,0 +1,26 @@
+{
+  "name": "djangocms-comments",
+  "homepage": "https://github.com/Nekmo/djangocms-comments",
+  "authors": [
+    "Nekmo <contacto@nekmo.com>"
+  ],
+  "description": "Djangocms-Comments Static libs",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "djangocms-comments"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "djangocms_comments/static/djangocms_comments/src/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "^3.3.6"
+  }
+}
