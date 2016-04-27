@@ -1,7 +1,7 @@
+import django
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.db.models import TextField
-from django.db.models.functions import Concat
 from django.forms import ModelForm, ChoiceField
 from django.template.defaultfilters import truncatechars
 from django.utils.html import escape
@@ -15,6 +15,11 @@ from .models import CommentsConfig, Comment, MODERATED, REQUIRES_ATTENTION
 EMPTY = (None, '---------')
 MODERATED = [EMPTY] + MODERATED
 REQUIRES_ATTENTION = [EMPTY] + REQUIRES_ATTENTION
+
+
+if django.VERSION >= (1, 8):
+    # Concat is not available in 1.7 and 1.6
+    from django.db.models.functions import Concat
 
 
 def get_user_agent(agent):
@@ -157,12 +162,12 @@ class CommentAdmin(admin.ModelAdmin):
     def author_print(self, obj):
         return self._strong_unread(obj, obj.author)
     author_print.short_description = _('Author')
-    author_print.admin_order_field = 'author_sort'
+    author_print.admin_order_field = 'author_sort' if django.VERSION >= (1, 8) else None
 
     def page_print(self, obj):
         return self._strong_unread(obj, obj.page)
     page_print.short_description = _('Page')
-    page_print.admin_order_field = 'page_sort'
+    page_print.admin_order_field = 'page_sort' if django.VERSION >= (1, 8) else None
 
     def created_at_print(self, obj):
         return self._strong_unread(obj, timesince(obj.created_at))
@@ -189,8 +194,10 @@ class CommentAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(CommentAdmin, self).get_queryset(request)
-        qs = qs.annotate(author_sort=Concat('author_type', 'author_id', output_field=TextField()))
-        qs = qs.annotate(page_sort=Concat('page_type', 'page_id', output_field=TextField()))
+        if django.VERSION >= (1, 8):
+            # Concat is not available in 1.7 and 1.6
+            qs = qs.annotate(author_sort=Concat('author_type', 'author_id', output_field=TextField()))
+            qs = qs.annotate(page_sort=Concat('page_type', 'page_id', output_field=TextField()))
         return qs
 
 
