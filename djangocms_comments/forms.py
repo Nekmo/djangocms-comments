@@ -81,6 +81,7 @@ class CommentForm(ModelForm):
                           **dict((key, self.cleaned_data[key]) for key in ['body', 'page_id', 'page_type']))
         if is_spam:
             comment.requires_attention = 'spam'
+            comment.moderated = 'spam'
         elif not published:
             comment.requires_attention = 'created'
         if commit:

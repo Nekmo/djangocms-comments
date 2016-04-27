@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
+from django.db.models import TextField
+from django.db.models.functions import Concat
 from django.forms import ModelForm, ChoiceField
 from django.template.defaultfilters import truncatechars
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments.models import AnonymousAuthor
@@ -27,6 +31,85 @@ class CommentsConfigAdmin(admin.ModelAdmin):
 admin.site.register(CommentsConfig, CommentsConfigAdmin)
 
 
+class StatusFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Comment status')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'status'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('published', _('Published')),
+            ('hidden', _('Hidden (unpublished)')),
+            ('spam', _('Spam')),
+            ('edited', _('Edited by admin')),
+            ('deleted', _('Deleted')),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'published':
+            return queryset.filter(moderated='', published=True)
+        elif self.value() == 'hidden':
+            return queryset.filter(published=False, moderated='')
+        elif self.value() == 'spam':
+            return queryset.filter(moderated='spam')
+        elif self.value() == 'edited':
+            return queryset.filter(moderated='edited')
+        elif self.value() == 'deleted':
+            return queryset.filter(moderated='deleted')
+
+
+class ReadFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Revised comment')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'read'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            (True, _('Yes (read)')),
+            (False, _('No (unread)')),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'True':
+            return queryset.filter(requires_attention='')
+        elif self.value() == 'False':
+            return queryset.exclude(requires_attention='')
+
+
 class CommentAdminForm(ModelForm):
     moderated = ChoiceField(choices=MODERATED, required=False)
     requires_attention = ChoiceField(choices=REQUIRES_ATTENTION, required=False)
@@ -38,8 +121,9 @@ class CommentAdminForm(ModelForm):
 
 class CommentAdmin(admin.ModelAdmin):
     change_form_template = 'djangocms_comments/comment-admin-info.html'
+    list_filter = (StatusFilter, ReadFilter)
     form = CommentAdminForm
-    list_display = ('body_print', 'requires_attention_print', 'author', 'page')
+    list_display = ('body_print', 'status', 'author_print', 'page_print', 'created_at_print')
 
     fieldsets = (
         (None, {
@@ -63,23 +147,59 @@ class CommentAdmin(admin.ModelAdmin):
                                                          extra_context=extra_context)
 
     def requires_attention_print(self, obj):
-        if not obj.requires_attention:
-            return ''
-        return mark_safe('<span class="label label-{1}">{0}</span>'.format(
-            obj.requires_attention, {'spam': 'danger', 'edited': 'info'}.get(obj.requires_attention, 'default')
-        ))
+        pass
     requires_attention_print.short_description = _('Unread')
 
     def body_print(self, obj):
-        return truncatechars(obj.body, 80)
+        return self._strong_unread(obj, truncatechars(obj.body, 80))
     body_print.short_description = _('Comment')
+
+    def author_print(self, obj):
+        return self._strong_unread(obj, obj.author)
+    author_print.short_description = _('Author')
+    author_print.admin_order_field = 'author_sort'
+
+    def page_print(self, obj):
+        return self._strong_unread(obj, obj.page)
+    page_print.short_description = _('Page')
+    page_print.admin_order_field = 'page_sort'
+
+    def created_at_print(self, obj):
+        return self._strong_unread(obj, timesince(obj.created_at))
+    created_at_print.short_description = _('Created')
+    created_at_print.admin_order_field = 'created_at'
+
+    @staticmethod
+    def _strong_unread(obj, output):
+        if not obj.requires_attention:
+            return output
+        return mark_safe('<b>{}</b>'.format(escape(output)))
+
+    def status(self, obj):
+        status = obj.moderated
+        if not status:
+            status = 'published' if obj.published else 'hidden'
+        return mark_safe('<span class="label label-{1}">{0}</span>'.format(
+            status, {'spam': 'danger', 'edited': 'info',
+                     'published': 'primary', 'deleted': 'warning'}.get(status, 'default')
+        ))
 
     def has_add_permission(self, request):
         return False
 
+    def get_queryset(self, request):
+        qs = super(CommentAdmin, self).get_queryset(request)
+        qs = qs.annotate(author_sort=Concat('author_type', 'author_id', output_field=TextField()))
+        qs = qs.annotate(page_sort=Concat('page_type', 'page_id', output_field=TextField()))
+        return qs
+
+
     class Media:
         css = {
-            'all': ['djangocms_comments/css/comment-admin.css'],
+            'all': [
+                'djangocms_comments/src/css/admin-light-bootstrap.css',
+                'djangocms_comments/src/css/comment-admin.css',
+            ],
         }
 
 
