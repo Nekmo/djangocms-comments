@@ -21,6 +21,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-sass": "^3.3.6"
+    "bootstrap-sass": "^3.3.6",
+    "autosize": "^3.0.15",
+    "blueimp-md5": "^2.3.0"
   }
 }
