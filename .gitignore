@@ -13,7 +13,7 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
+/dist
 downloads/
 eggs/
 .eggs/
@@ -62,3 +62,5 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+/djangocms_comments/static/djangocms_comments/src/libs
+.sass-cache
