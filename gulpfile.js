@@ -11,7 +11,7 @@ var SRCS = {
     main: 'djangocms_comments/static/djangocms_comments'
 };
 
-JS_FILES = ['src/js/comments.js', 'src/libs/autosize/dist/autosize.js', 'src/libs/blueimp-md5/dist/md5.js'];
+JS_FILES = ['src/js/comments.js', 'src/libs/autosize/dist/autosize.js', 'src/libs/blueimp-md5/js/md5.min.js'];
 
 var defaultTasks = ['minify-js'];
 

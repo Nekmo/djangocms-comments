@@ -204,8 +204,9 @@ class CommentAdmin(admin.ModelAdmin):
     class Media:
         css = {
             'all': [
-                'djangocms_comments/src/css/admin-{0}-bootstrap.css'.format('with' if settings.ADMIN_WITH_BOOTSTRAP
-                                                                            else 'without'),
+                'djangocms_comments/{0}/css/admin-{1}-bootstrap.css'.format(
+                    'src' if settings.COMMENTS_FORCE_STATIC_SRC else 'dist',
+                    'with' if settings.COMMENTS_ADMIN_WITH_BOOTSTRAP3 else 'without'),
             ],
         }
 

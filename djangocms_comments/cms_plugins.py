@@ -3,7 +3,7 @@ from cms.plugin_pool import plugin_pool
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
-from djangocms_comments.forms import UnregisteredCommentForm, CommentForm
+from djangocms_comments import settings
 from djangocms_comments.views import get_form_class, get_is_user
 from .models import Comments, Comment
 
@@ -22,6 +22,7 @@ class CommentsPlugin(CMSPluginBase):
         request = context['request']
         ct = ContentType.objects.get_for_model(obj)
         context['comments'] = self.get_comments(request, obj, ct)
+        context['use_src'] = settings.COMMENTS_FORCE_STATIC_SRC
         initial = {
             'config_id': instance.config.pk,
             'page_type': ct.pk,
