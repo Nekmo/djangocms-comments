@@ -1,0 +1,12 @@
+/* line 2, ../scss/admin-without-bootstrap.scss */
+#author-comment-card {
+  margin-bottom: 20px;
+}
+/* line 5, ../scss/admin-without-bootstrap.scss */
+#author-comment-card .avatar {
+  vertical-align: top;
+}
+/* line 9, ../scss/admin-without-bootstrap.scss */
+#author-comment-card .author-comment-info {
+  display: inline-block;
+}

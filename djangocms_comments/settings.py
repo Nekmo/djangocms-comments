@@ -9,6 +9,7 @@ MAX_UPPERCASE_RATIO_COMMENT_BODY = 0.3
 COMMENT_TEXTAREA_ROWS = 4
 COMMENT_WAIT_SECONDS = 120
 COMMENT_PREVENT_USURP_USERNAME = True
+ADMIN_WITH_BOOTSTRAP = True
 
 # Override my settings usign Django Settings
 for var_name, value in dict(locals()).items():

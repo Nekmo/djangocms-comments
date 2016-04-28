@@ -1,0 +1,96 @@
+/* line 5, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+/* line 20, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label:empty {
+  display: none;
+}
+/* line 25, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.btn .label {
+  position: relative;
+  top: -1px;
+}
+
+/* line 33, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+a.label:hover, a.label:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* line 44, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-default {
+  background-color: #777777;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-default[href]:hover, .label-default[href]:focus {
+  background-color: #5e5e5e;
+}
+
+/* line 48, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-primary {
+  background-color: #337ab7;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-primary[href]:hover, .label-primary[href]:focus {
+  background-color: #286090;
+}
+
+/* line 52, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-success {
+  background-color: #5cb85c;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-success[href]:hover, .label-success[href]:focus {
+  background-color: #449d44;
+}
+
+/* line 56, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-info {
+  background-color: #5bc0de;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-info[href]:hover, .label-info[href]:focus {
+  background-color: #31b0d5;
+}
+
+/* line 60, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-warning {
+  background-color: #f0ad4e;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-warning[href]:hover, .label-warning[href]:focus {
+  background-color: #ec971f;
+}
+
+/* line 64, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/_labels.scss */
+.label-danger {
+  background-color: #d9534f;
+}
+/* line 7, ../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_labels.scss */
+.label-danger[href]:hover, .label-danger[href]:focus {
+  background-color: #c9302c;
+}
+
+/* line 2, ../scss/admin-without-bootstrap.scss */
+#author-comment-card {
+  margin-bottom: 20px;
+}
+/* line 5, ../scss/admin-without-bootstrap.scss */
+#author-comment-card .avatar {
+  vertical-align: top;
+}
+/* line 9, ../scss/admin-without-bootstrap.scss */
+#author-comment-card .author-comment-info {
+  display: inline-block;
+}

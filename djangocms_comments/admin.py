@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 
+from djangocms_comments import settings
 from djangocms_comments.models import AnonymousAuthor
 from .models import CommentsConfig, Comment, MODERATED, REQUIRES_ATTENTION
 
@@ -200,12 +201,11 @@ class CommentAdmin(admin.ModelAdmin):
             qs = qs.annotate(page_sort=Concat('page_type', 'page_id', output_field=TextField()))
         return qs
 
-
     class Media:
         css = {
             'all': [
-                'djangocms_comments/src/css/admin-light-bootstrap.css',
-                'djangocms_comments/src/css/comment-admin.css',
+                'djangocms_comments/src/css/admin-{0}-bootstrap.css'.format('with' if settings.ADMIN_WITH_BOOTSTRAP
+                                                                            else 'without'),
             ],
         }
 
