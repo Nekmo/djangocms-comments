@@ -1,3 +1,4 @@
+import django
 from django import forms
 from django.forms.fields import ChoiceField
 from django.forms.utils import flatatt
@@ -7,7 +8,12 @@ from django.utils import html
 
 
 from django.utils.encoding import python_2_unicode_compatible, force_text
-from django.utils.html import html_safe, format_html
+if django.VERSION < (1, 7):
+    from django.utils.html import html_safe
+else:
+    def html_safe(klass):
+        return klass
+from django.utils.html import format_html
 
 
 class SubmitButtonWidget(forms.Widget):
