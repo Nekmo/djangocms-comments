@@ -10,13 +10,19 @@ from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments import settings
+from djangocms_comments.fields import SubmitButtonField, MultipleSubmitButtonRendered, MultipleSubmitButton
 from djangocms_comments.models import AnonymousAuthor
+from djangocms_comments.spam import get_spam_protection, FakeSpamProtection
 from .models import CommentsConfig, Comment, MODERATED, REQUIRES_ATTENTION
 
 EMPTY = (None, '---------')
 MODERATED = [EMPTY] + MODERATED
 REQUIRES_ATTENTION = [EMPTY] + REQUIRES_ATTENTION
-
+CHANGE_TO_CHOICES = [
+    ('hidden', _('Hidden')),
+    ('published', _('Published')),
+    ('spam', _('Spam')),
+]
 
 if django.VERSION >= (1, 8):
     # Concat is not available in 1.7 and 1.6
@@ -119,6 +125,21 @@ class ReadFilter(admin.SimpleListFilter):
 class CommentAdminForm(ModelForm):
     moderated = ChoiceField(choices=MODERATED, required=False)
     requires_attention = ChoiceField(choices=REQUIRES_ATTENTION, required=False)
+    # change_to = MultipleSubmitButtonRendered('change_to', 'published', {'enabled_classes': {
+    #     'hidden': 'btn-primary', 'spam': 'btn-danger', 'published': 'btn-success'
+    # }}, choices=CHANGE_TO_CHOICES)
+    change_to = ChoiceField(widget=MultipleSubmitButton(attrs={'enabled_classes': {
+        'hidden': 'btn-primary', 'spam': 'btn-danger', 'published': 'btn-success'
+    }}), choices=CHANGE_TO_CHOICES, required=False)
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs['instance']
+        kwargs['initial'] = kwargs.get('initial', {})
+        if instance.moderated == 'spam':
+            kwargs['initial']['change_to'] = 'spam'
+        else:
+            kwargs['initial']['change_to'] = 'published' if instance.published else 'hidden'
+        super(CommentAdminForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Comment
@@ -130,6 +151,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = (StatusFilter, ReadFilter)
     form = CommentAdminForm
     list_display = ('body_print', 'status', 'author_print', 'page_print', 'created_at_print')
+    _user_message = None
 
     fieldsets = (
         (None, {
@@ -149,8 +171,29 @@ class CommentAdmin(admin.ModelAdmin):
             extra_context['user_agent'] = get_user_agent(comment.user_agent) or truncatechars(comment.user_agent, 60)
             comment.requires_attention = ''
             comment.save()
-        return super(CommentAdmin, self).changeform_view(request, object_id=object_id, form_url=form_url,
-                                                         extra_context=extra_context)
+        changeform = super(CommentAdmin, self).changeform_view(request, object_id=object_id, form_url=form_url,
+                                                               extra_context=extra_context)
+        return changeform
+
+    def save_model(self, request, obj, form, change):
+        if form.cleaned_data['change_to']:
+            change_to = form.cleaned_data['change_to']
+            if change_to == 'spam':
+                obj.moderated = ''
+                get_spam_protection().report(True, obj.author, obj.author.email, obj.body, obj.user_ip,
+                                             obj.user_agent, url=getattr(obj.author, 'website', None),
+                                             referrer=obj.referrer, blog_domain=request.get_host())
+                obj.moderated = 'spam'
+            obj.published = change_to == 'published'
+            msg = {
+                'spam': _('The comment has been marked as spam and is no longer visible.'),
+                'hidden': _('The comment has been marked as hidden and is no longer visible.'),
+                'published': _('The comment has been marked as published.'),
+            }[change_to]
+            if change_to == 'spam' and get_spam_protection() is not FakeSpamProtection:
+                msg += _(' It has also been reported as spam to {0}.').format(get_spam_protection().__class__.__name__)
+            self.message_user(request, msg)
+        return super(CommentAdmin, self).save_model(request, obj, form, change)
 
     def requires_attention_print(self, obj):
         pass

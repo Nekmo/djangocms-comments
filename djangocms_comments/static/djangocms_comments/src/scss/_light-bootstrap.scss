@@ -1,3 +1,105 @@
 @import "../libs/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 @import "../libs/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 @import "../libs/bootstrap-sass/assets/stylesheets/bootstrap/labels";
+@import "../libs/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+@import "../libs/bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
+
+@mixin button-variant-important($color, $background, $border) {
+  color: $color !important;
+  background-color: $background !important;
+  border-color: $border !important;
+
+  &:focus,
+  &.focus {
+    color: $color !important;
+    background-color: darken($background, 10%) !important;
+        border-color: darken($border, 25%) !important;
+  }
+  &:hover {
+    color: $color !important;
+    background-color: darken($background, 10%) !important;
+        border-color: darken($border, 12%);
+  }
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    color: $color !important;
+    background-color: darken($background, 10%) !important;
+        border-color: darken($border, 12%) !important;
+
+    &:hover,
+    &:focus,
+    &.focus {
+      color: $color !important;
+      background-color: darken($background, 17%) !important;
+          border-color: darken($border, 25%) !important;
+    }
+  }
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    background-image: none !important;
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &:hover,
+    &:focus,
+    &.focus {
+      background-color: $background !important;
+          border-color: $border !important;
+    }
+  }
+
+  .badge {
+    color: $background !important;
+    background-color: $color !important;
+  }
+}
+
+// https://github.com/divio/djangocms-admin-style/issues/336
+#author-comment-card {
+    .btn {
+        padding: $padding-base-vertical $padding-base-horizontal !important;
+        font-size: $font-size-base !important;
+        line-height: $line-height-base !important;
+        border-radius: $btn-border-radius-base !important;
+    }
+
+    .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+        border-bottom-right-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+    }
+
+    .btn-group > .btn:last-child:not(:first-child), .btn-group > .dropdown-toggle:not(:first-child) {
+        border-bottom-left-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+    }
+
+    .btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+        border-radius: 0 !important;
+    }
+
+    .btn-default {
+      @include button-variant-important($btn-default-color, $btn-default-bg, $btn-default-border);
+    }
+    .btn-primary {
+      @include button-variant-important($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    }
+    // Success appears as green
+    .btn-success {
+      @include button-variant-important($btn-success-color, $btn-success-bg, $btn-success-border);
+    }
+    // Info appears as blue-green
+    .btn-info {
+      @include button-variant-important($btn-info-color, $btn-info-bg, $btn-info-border);
+    }
+    // Warning appears as orange
+    .btn-warning {
+      @include button-variant-important($btn-warning-color, $btn-warning-bg, $btn-warning-border);
+    }
+    // Danger and error appear as red
+    .btn-danger {
+      @include button-variant-important($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+    }
+}

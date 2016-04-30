@@ -24,7 +24,7 @@
                 <a href="{{ original.referrer }}">{{ original.referrer|truncatechars:100 }}</a>
             </div>
         </div>
+        {{ adminform.form.change_to }}
     </div>
-    {{ adminform }}
     {{ block.super }}
 {% endblock %}

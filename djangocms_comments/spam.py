@@ -60,6 +60,7 @@ class FakeSpamProtection(SpamProtection):
 def get_spam_protection(name='default'):
     if name not in _spam_cache:
         spam_protection = settings.SPAM_PROTECTION or {'default': {'BACKEND': FakeSpamProtection}}
+        spam_protection = dict(spam_protection)
         conf = spam_protection[name]
         backend = conf.pop('BACKEND')
         conf = dict((key.lower(), value) for key, value in conf.items())
