@@ -2,6 +2,10 @@
 {% load i18n comments_utils %}
 {% block field_sets %}
     <div id="author-comment-card">
+        <div id="controls">
+            {{ adminform.form.change_to }}
+            {{ adminform.form.soft_delete }}
+        </div>
         <img src="http://www.gravatar.com/avatar/{{ original.author.email|md5 }}" class="avatar" />
         <div class="author-comment-info">
             <div>
@@ -24,7 +28,6 @@
                 <a href="{{ original.referrer }}">{{ original.referrer|truncatechars:100 }}</a>
             </div>
         </div>
-        {{ adminform.form.change_to }}
     </div>
     {{ block.super }}
 {% endblock %}

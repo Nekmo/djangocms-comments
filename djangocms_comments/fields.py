@@ -3,7 +3,7 @@ from django import forms
 from django.forms.fields import ChoiceField
 from django.forms.utils import flatatt
 from django.forms.widgets import CheckboxChoiceInput, ChoiceFieldRenderer, RadioChoiceInput, SubWidget, RendererMixin, \
-    Select
+    Select, CheckboxInput
 from django.utils import html
 
 
@@ -40,11 +40,7 @@ class ButtonGroupRenderer(ChoiceFieldRenderer):
 
 @html_safe
 @python_2_unicode_compatible
-class Button(SubWidget):
-    """
-    An object used by ChoiceFieldRenderer that represents a single
-    <input type='$input_type'>.
-    """
+class ChoiceButton(SubWidget):
     input_type = None  # Subclasses must define this
 
     def __init__(self, name, value, attrs, choice, index):
@@ -91,9 +87,21 @@ class Button(SubWidget):
 
 
 class MultipleSubmitButtonRendered(ButtonGroupRenderer):
-    choice_input_class = Button
+    choice_input_class = ChoiceButton
 
 
 class MultipleSubmitButton(RendererMixin, Select):
     renderer = MultipleSubmitButtonRendered
     _empty_value = ''
+
+
+class Button(CheckboxInput):
+    def __init__(self, attrs=None, check_test=None, values=None):
+        self.values = values or ['True', 'False']
+        super(Button, self).__init__(attrs, check_test)
+
+    def render(self, name, value, attrs=None):
+        final_attrs = self.build_attrs(attrs, type='checkbox', name=name)
+        if self.check_test(value):
+            final_attrs['checked'] = 'checked'
+        return format_html('<button{}>{}</button>', flatatt(final_attrs), self.values[0 if not value else 1])

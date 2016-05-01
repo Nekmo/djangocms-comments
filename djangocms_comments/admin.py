@@ -2,7 +2,7 @@ import django
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.db.models import TextField
-from django.forms import ModelForm, ChoiceField
+from django.forms import ModelForm, ChoiceField, CharField
 from django.template.defaultfilters import truncatechars
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -10,7 +10,8 @@ from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 
 from djangocms_comments import settings
-from djangocms_comments.fields import SubmitButtonField, MultipleSubmitButtonRendered, MultipleSubmitButton
+from djangocms_comments.fields import SubmitButtonField, MultipleSubmitButtonRendered, MultipleSubmitButton, \
+    ButtonGroupRenderer, Button
 from djangocms_comments.models import AnonymousAuthor
 from djangocms_comments.spam import get_spam_protection, FakeSpamProtection
 from .models import CommentsConfig, Comment, MODERATED, REQUIRES_ATTENTION
@@ -131,6 +132,7 @@ class CommentAdminForm(ModelForm):
     change_to = ChoiceField(widget=MultipleSubmitButton(attrs={'enabled_classes': {
         'hidden': 'btn-primary', 'spam': 'btn-danger', 'published': 'btn-success'
     }}), choices=CHANGE_TO_CHOICES, required=False)
+    soft_delete = CharField(widget=Button(values=('Soft delete', 'Restore comment')), )
 
     def __init__(self, *args, **kwargs):
         instance = kwargs['instance']

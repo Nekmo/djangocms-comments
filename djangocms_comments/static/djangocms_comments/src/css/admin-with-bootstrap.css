@@ -1026,6 +1026,7 @@ input[type="button"].btn-block {
 /* line 2, ../scss/admin-without-bootstrap.scss */
 #author-comment-card {
   margin-bottom: 20px;
+  width: 80%;
 }
 /* line 5, ../scss/admin-without-bootstrap.scss */
 #author-comment-card .avatar {
@@ -1034,4 +1035,12 @@ input[type="button"].btn-block {
 /* line 9, ../scss/admin-without-bootstrap.scss */
 #author-comment-card .author-comment-info {
   display: inline-block;
+}
+/* line 13, ../scss/admin-without-bootstrap.scss */
+#author-comment-card #controls {
+  float: right;
+}
+/* line 16, ../scss/admin-without-bootstrap.scss */
+#author-comment-card #controls #id_soft_delete {
+  display: block;
 }
