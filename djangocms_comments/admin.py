@@ -2,7 +2,8 @@ import django
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.db.models import TextField
-from django.forms import ModelForm, ChoiceField, CharField
+from django.forms import ModelForm, ChoiceField, CharField, BooleanField
+from django.forms.widgets import Input
 from django.template.defaultfilters import truncatechars
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -132,7 +133,6 @@ class CommentAdminForm(ModelForm):
     change_to = ChoiceField(widget=MultipleSubmitButton(attrs={'enabled_classes': {
         'hidden': 'btn-primary', 'spam': 'btn-danger', 'published': 'btn-success'
     }}), choices=CHANGE_TO_CHOICES, required=False)
-    soft_delete = CharField(widget=Button(values=('Soft delete', 'Restore comment')), )
 
     def __init__(self, *args, **kwargs):
         instance = kwargs['instance']
@@ -194,6 +194,11 @@ class CommentAdmin(admin.ModelAdmin):
             }[change_to]
             if change_to == 'spam' and get_spam_protection() is not FakeSpamProtection:
                 msg += _(' It has also been reported as spam to {0}.').format(get_spam_protection().__class__.__name__)
+            self.message_user(request, msg)
+        if request.POST.get('toggle_soft_delete'):
+            obj.moderated = '' if obj.moderated == 'deleted' else 'deleted'
+            msg = _('The comment has been moderate and displayed as deleted.') if obj.moderated == 'deleted' \
+                else _('The comment has been restored.')
             self.message_user(request, msg)
         return super(CommentAdmin, self).save_model(request, obj, form, change)
 

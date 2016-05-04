@@ -85,7 +85,6 @@ class ChoiceButton(SubWidget):
         return self.attrs.get('id', '')
 
 
-
 class MultipleSubmitButtonRendered(ButtonGroupRenderer):
     choice_input_class = ChoiceButton
 
@@ -101,7 +100,12 @@ class Button(CheckboxInput):
         super(Button, self).__init__(attrs, check_test)
 
     def render(self, name, value, attrs=None):
-        final_attrs = self.build_attrs(attrs, type='checkbox', name=name)
-        if self.check_test(value):
-            final_attrs['checked'] = 'checked'
+        attrs = dict(attrs or {})
+        attrs.update(self.attrs)
+        enabled_class = attrs.pop('enabled_class', 'btn-primary')
+        disabled_class = attrs.pop('dissabled_class', '')
+        attrs['class'] = ' '.join(filter(lambda x: x, [attrs.get('class', 'btn'),
+                                                       enabled_class if value else disabled_class]))
+        attrs['type'] = attrs.get('type', 'submit')
+        final_attrs = self.build_attrs(attrs, name=name)
         return format_html('<button{}>{}</button>', flatatt(final_attrs), self.values[0 if not value else 1])

@@ -1,10 +1,9 @@
 {% extends "admin/change_form.html" %}
-{% load i18n comments_utils %}
+{% load i18n comments_utils comments_admin %}
 {% block field_sets %}
     <div id="author-comment-card">
         <div id="controls">
             {{ adminform.form.change_to }}
-            {{ adminform.form.soft_delete }}
         </div>
         <img src="http://www.gravatar.com/avatar/{{ original.author.email|md5 }}" class="avatar" />
         <div class="author-comment-info">
@@ -31,3 +30,5 @@
     </div>
     {{ block.super }}
 {% endblock %}
+
+{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}

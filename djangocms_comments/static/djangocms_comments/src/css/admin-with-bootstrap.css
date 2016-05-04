@@ -737,28 +737,28 @@ input[type="button"].btn-block {
   pointer-events: none;
 }
 
-/* line 62, ../scss/_light-bootstrap.scss */
+/* line 70, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn {
   padding: 6px 12px !important;
   font-size: 14px !important;
   line-height: 1.42857 !important;
   border-radius: 4px !important;
 }
-/* line 69, ../scss/_light-bootstrap.scss */
+/* line 74, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
   border-bottom-right-radius: 0 !important;
   border-top-right-radius: 0 !important;
 }
-/* line 74, ../scss/_light-bootstrap.scss */
+/* line 79, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-group > .btn:last-child:not(:first-child), #author-comment-card .btn-group > .dropdown-toggle:not(:first-child) {
   border-bottom-left-radius: 0 !important;
   border-top-left-radius: 0 !important;
 }
-/* line 79, ../scss/_light-bootstrap.scss */
+/* line 84, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
   border-radius: 0 !important;
 }
-/* line 83, ../scss/_light-bootstrap.scss */
+/* line 88, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-default {
   color: #333 !important;
   background-color: #fff !important;
@@ -802,7 +802,7 @@ input[type="button"].btn-block {
   color: #fff !important;
   background-color: #333 !important;
 }
-/* line 86, ../scss/_light-bootstrap.scss */
+/* line 91, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-primary {
   color: #fff !important;
   background-color: #337ab7 !important;
@@ -846,7 +846,7 @@ input[type="button"].btn-block {
   color: #337ab7 !important;
   background-color: #fff !important;
 }
-/* line 90, ../scss/_light-bootstrap.scss */
+/* line 95, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-success {
   color: #fff !important;
   background-color: #5cb85c !important;
@@ -890,7 +890,7 @@ input[type="button"].btn-block {
   color: #5cb85c !important;
   background-color: #fff !important;
 }
-/* line 94, ../scss/_light-bootstrap.scss */
+/* line 99, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-info {
   color: #fff !important;
   background-color: #5bc0de !important;
@@ -934,7 +934,7 @@ input[type="button"].btn-block {
   color: #5bc0de !important;
   background-color: #fff !important;
 }
-/* line 98, ../scss/_light-bootstrap.scss */
+/* line 103, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-warning {
   color: #fff !important;
   background-color: #f0ad4e !important;
@@ -978,7 +978,7 @@ input[type="button"].btn-block {
   color: #f0ad4e !important;
   background-color: #fff !important;
 }
-/* line 102, ../scss/_light-bootstrap.scss */
+/* line 107, ../scss/_light-bootstrap.scss */
 #author-comment-card .btn-danger {
   color: #fff !important;
   background-color: #d9534f !important;
@@ -1040,7 +1040,14 @@ input[type="button"].btn-block {
 #author-comment-card #controls {
   float: right;
 }
-/* line 16, ../scss/admin-without-bootstrap.scss */
-#author-comment-card #controls #id_soft_delete {
-  display: block;
+
+/* line 21, ../scss/admin-without-bootstrap.scss */
+#toggle_soft_delete.delete {
+  color: #fff !important;
+  background: #d9534f !important;
+}
+/* line 26, ../scss/admin-without-bootstrap.scss */
+#toggle_soft_delete.restore {
+  color: #fff !important;
+  background: #5cb85c !important;
 }

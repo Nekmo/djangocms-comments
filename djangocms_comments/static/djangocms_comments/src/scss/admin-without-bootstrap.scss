@@ -12,11 +12,19 @@
 
     #controls {
         float: right;
-
-        #id_soft_delete {
-            display: block;
-        }
     }
 
     width: 80%;
+}
+
+#toggle_soft_delete {
+    &.delete {
+        color: #fff !important;
+        background: #d9534f !important;
+    }
+
+    &.restore {
+        color: #fff !important;
+        background: #5cb85c !important;
+    }
 }
