@@ -166,6 +166,12 @@ class CommentAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_actions(self, request):
+        actions = super(CommentAdmin, self).get_actions(request)
+        for action in ['make_spam', 'make_published', 'make_soft_deleted', 'make_hidden']:
+            actions[action] = (getattr(self, action), action, getattr(getattr(self, action), 'verbose_name', action))
+        return actions
+
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         extra_context = extra_context or {}
         comment = self.get_object(request, unquote(object_id))
@@ -258,6 +264,44 @@ class CommentAdmin(admin.ModelAdmin):
             qs = qs.annotate(author_sort=Concat('author_type', 'author_id', output_field=TextField()))
             qs = qs.annotate(page_sort=Concat('page_type', 'page_id', output_field=TextField()))
         return qs
+
+    def _make_base(self, request, queryset, action, message):
+        queryset = queryset.exclude(moderated='spam')
+        for comment in queryset.all():
+            action(comment)
+            comment.save()
+        message_bit = _("1 comment was") if queryset.count() == 1 else _("{} comment were").format(queryset.count())
+        self.message_user(request, "%s successfully reported and marked as spam." % message_bit)
+
+    def make_spam(self, request, queryset):
+        def action(comment):
+            comment.moderated = 'spam'
+        self._make_base(request, queryset.exclude(moderated='spam'), action,
+                        _("%s successfully reported and marked as spam."))
+    make_spam.verbose_name = _('Mark and report spam')
+
+    def make_soft_deleted(self, request, queryset):
+        def action(comment):
+            comment.moderated = 'deleted'
+            comment.published = True
+        self._make_base(request, queryset.exclude(moderated='deleted', published=True), action,
+                        _("%s successfully removed usign soft delete."))
+    make_soft_deleted.verbose_name = _('Remove usign soft delete')
+
+    def make_published(self, request, queryset):
+        def action(comment):
+            comment.moderated = ''
+            comment.published = True
+        self._make_base(request, queryset.exclude(moderated='', published=True), action,
+                        _("%s successfully published."))
+    make_published.verbose_name = _('Publish')
+
+    def make_hidden(self, request, queryset):
+        def action(comment):
+            comment.published = False
+        self._make_base(request, queryset.exclude(published=False), action,
+                        _("%s successfully hidden."))
+    make_hidden.verbose_name = _('Hide')
 
     class Media:
         css = {
