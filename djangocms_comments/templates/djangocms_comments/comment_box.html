@@ -18,7 +18,7 @@
                     <strong>{{ request.user }}</strong>
                     {% if request.user.is_staff %}<span class="label label-primary">Staff</span>{% endif %}
                 </div>
-                <div>X comentarios</div>
+                <div>X comments</div>
             </div>
         </div>
         {% else %}
@@ -29,7 +29,7 @@
                 {% bootstrap_field form.website show_label=false horizontal_label_class='col-md-0' %}
             </div>
             <div class="col-md-5">
-                <img src="http://www.gravatar.com/avatar/" class="avatar dynamic-gravatar" />
+                <img src="http://www.gravatar.com/avatar/?s=150&d=mm" class="avatar dynamic-gravatar" />
             </div>
         </div>
         {% endif %}

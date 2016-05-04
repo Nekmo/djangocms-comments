@@ -130,9 +130,19 @@ You can overwrite the following options in your settings file:
 
 https://github.com/Nekmo/djangocms-comments/blob/master/djangocms_comments/settings.py
 
+Features
+========
+- Anonymous and registers users comments.
+- Pretty comment administration.
+- Akismet support.
+- Moderation options: spam, hidden, soft deleted, edited...
+- Easy to add to any page.
+- Many customization options.
+- Separates comments systems by language and sites.
+- Pretty Bootstrap3 integration.
+
 TODO
 ====
-- :strike:`Akismet Support.`
 - Social authentication (Twitter, Google, Facebook, Github...).
 - Reply comments.
 - Rich text.

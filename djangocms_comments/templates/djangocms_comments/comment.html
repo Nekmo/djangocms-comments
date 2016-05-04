@@ -1,5 +1,6 @@
-{% load comments_utils %}
-<div class="row comment{% if not comment.published %} unpublished{% endif %}">
+{% load comments_utils i18n %}
+<div class="row comment{% if not comment.published %} unpublished{% endif %}
+            {% if comment.moderated == 'spam' %} spam{% endif %}">
     <div class="col-md-3">
         <img src="http://www.gravatar.com/avatar/{{ comment.author.email|md5 }}" class="avatar" />
     </div>
@@ -10,7 +11,24 @@
                 <span>{{ comment.created_at|timesince }}</span>
             </div>
             <div class="panel-body">
-                <pre>{{ comment.body }}</pre>
+                {% if comment.moderated == 'deleted' and is_staff %}
+                <div class="text-danger">{% trans "This comment has been deleted and users can't see it." %}</div>
+                {% endif %}
+                {% if comment.moderated != 'deleted' or is_staff %}
+                    <pre class="{{ comment.moderated }}">{{ comment.body }}</pre>
+                {% endif %}
+                {% if comment.moderated == 'spam' %}
+                <div class="text-danger">{% trans "This comment is spam and users can't see it." %}</div>
+                {% elif comment.moderated %}
+                    <div class="text-warning">
+                        {% blocktrans with moderated=comment.get_moderated_display.lower %}
+                        This comment has been {{ moderated }} by a moderator.
+                        {% endblocktrans %}
+                    </div>
+                    {%if comment.moderated_reason %}
+                    <div class="text-warning"><strong>{% trans "Reason:"%} </strong>{{ comment.moderated_reason }}</div>
+                    {% endif %}
+                {% endif %}
             </div><!-- /panel-body -->
         </div><!-- /panel panel-default -->
     </div>

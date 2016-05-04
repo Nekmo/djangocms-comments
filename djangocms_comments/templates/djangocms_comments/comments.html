@@ -1,13 +1,25 @@
 {% load staticfiles sekizai_tags cms_tags %}
-{% addtoblock "js" %}
-<script src="{% static 'djangocms_comments/js/autosize.min.js' %}"></script>
-<script src="{% static 'djangocms_comments/js/md5.min.js' %}"></script>
-<script src="{% static 'djangocms_comments/js/comments.js' %}"></script>
-{% endaddtoblock %}
-{% addtoblock "css" %}
-<link rel="stylesheet" href="{% static 'djangocms_comments/css/comments.css' %}">
-{% endaddtoblock %}
+{% if use_src %}
+    {% addtoblock "js" %}
+    <script src="{% static 'djangocms_comments/src/libs/autosize/dist/autosize.js' %}"></script>
+    <script src="{% static 'djangocms_comments/src/libs/blueimp-md5/js/md5.min.js' %}"></script>
+    <script src="{% static 'djangocms_comments/src/js/comments.js' %}"></script>
+    {% endaddtoblock %}
+{% else %}
+    {% addtoblock "js" %}
+    <script src="{% static 'djangocms_comments/dist/js/comments.min.js' %}"></script>
+    {% endaddtoblock %}
+{% endif %}
 
+{% if use_src %}
+    {% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static 'djangocms_comments/src/css/comments.css' %}">
+    {% endaddtoblock %}
+{% else %}
+    {% addtoblock "css" %}
+    <link rel="stylesheet" href="{% static 'djangocms_comments/dist/css/comments.css' %}">
+    {% endaddtoblock %}
+{% endif %}
 <div class="comments-and-box-plugin">
     <h2>Comments</h2>
     <div class="comments-list">
