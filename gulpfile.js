@@ -13,7 +13,7 @@ var SRCS = {
 
 JS_FILES = ['src/js/comments.js', 'src/libs/autosize/dist/autosize.js', 'src/libs/blueimp-md5/js/md5.min.js'];
 
-var defaultTasks = ['minify-js'];
+var defaultTasks = ['minify-js', 'copy-img'];
 
 // CSS
 
@@ -50,6 +50,15 @@ gulp.task('minify-js', function () {
         }))
         .pipe(gulp.dest(SRCS['main'] + '/dist/js/'));
 });
+
+gulp.task('copy-img', function () {
+    var cwd = {cwd: 'djangocms_comments/boilerplates/bootstrap3/static/djangocms_comments'};
+    return gulp.src(['src/img/**/*'], cwd).pipe(
+            gulp.dest('dist/img', cwd)
+    );
+});
+
+
 
 
 gulp.task('default', defaultTasks);
