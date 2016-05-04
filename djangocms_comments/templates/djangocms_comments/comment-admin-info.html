@@ -4,6 +4,17 @@
     <div id="author-comment-card">
         <div id="controls">
             {{ adminform.form.change_to }}
+            <div class="is-moderated">
+                {% if original.moderated == 'spam' %}
+                {% blocktrans with moderated_by=original.moderated_by %}
+                The comment has been marked as spam by {{ moderated_by }}
+                {% endblocktrans %}
+                {% elif original.moderated and original.published %}
+                {% blocktrans with moderated_by=original.moderated_by moderated=original.get_moderated_display.lower %}
+                The comment has been {{ moderated }} by {{ moderated_by }}
+                {% endblocktrans %}
+                {% endif %}
+            </div>
         </div>
         <img src="http://www.gravatar.com/avatar/{{ original.author.email|md5 }}" class="avatar" />
         <div class="author-comment-info">

@@ -1040,13 +1040,23 @@ input[type="button"].btn-block {
 #author-comment-card #controls {
   float: right;
 }
+/* line 15, ../scss/admin-without-bootstrap.scss */
+#author-comment-card #controls .btn-group {
+  float: right;
+}
+/* line 18, ../scss/admin-without-bootstrap.scss */
+#author-comment-card #controls .is-moderated {
+  color: #985f0d;
+  clear: both;
+  padding-top: 10px;
+}
 
-/* line 21, ../scss/admin-without-bootstrap.scss */
+/* line 29, ../scss/admin-without-bootstrap.scss */
 #toggle_soft_delete.delete {
   color: #fff !important;
   background: #d9534f !important;
 }
-/* line 26, ../scss/admin-without-bootstrap.scss */
+/* line 34, ../scss/admin-without-bootstrap.scss */
 #toggle_soft_delete.restore {
   color: #fff !important;
   background: #5cb85c !important;

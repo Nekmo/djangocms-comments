@@ -80,13 +80,13 @@ class StatusFilter(admin.SimpleListFilter):
         if self.value() == 'published':
             return queryset.filter(moderated='', published=True)
         elif self.value() == 'hidden':
-            return queryset.filter(published=False, moderated='')
+            return queryset.filter(published=False).exclude(moderated='spam')
         elif self.value() == 'spam':
             return queryset.filter(moderated='spam')
         elif self.value() == 'edited':
-            return queryset.filter(moderated='edited')
+            return queryset.filter(moderated='edited', published=True)
         elif self.value() == 'deleted':
-            return queryset.filter(moderated='deleted')
+            return queryset.filter(moderated='deleted', published=True)
 
 
 class ReadFilter(admin.SimpleListFilter):
@@ -157,7 +157,7 @@ class CommentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('published', 'body', 'moderated_reason')
+            'fields': ('body', 'moderated_reason')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
@@ -178,7 +178,12 @@ class CommentAdmin(admin.ModelAdmin):
         return changeform
 
     def save_model(self, request, obj, form, change):
+        if obj.pk and form.cleaned_data['body'] != self.model.objects.get(pk=obj.pk).body:
+            self.message_user(request, _('The comment has been marked as edited.'))
+            obj.moderated_by = request.user
+            obj.moderated = 'edited'
         if form.cleaned_data['change_to']:
+            obj.moderated_by = request.user
             change_to = form.cleaned_data['change_to']
             if change_to == 'spam':
                 obj.moderated = ''
@@ -196,6 +201,7 @@ class CommentAdmin(admin.ModelAdmin):
                 msg += _(' It has also been reported as spam to {0}.').format(get_spam_protection().__class__.__name__)
             self.message_user(request, msg)
         if request.POST.get('toggle_soft_delete'):
+            obj.moderated_by = request.user
             obj.moderated = '' if obj.moderated == 'deleted' else 'deleted'
             msg = _('The comment has been moderate and displayed as deleted.') if obj.moderated == 'deleted' \
                 else _('The comment has been restored.')
@@ -233,8 +239,10 @@ class CommentAdmin(admin.ModelAdmin):
 
     def status(self, obj):
         status = obj.moderated
-        if not status:
-            status = 'published' if obj.published else 'hidden'
+        if not obj.published and status != 'spam':
+            status = 'hidden'
+        elif not status and obj.published:
+            status = 'published'
         return mark_safe('<span class="label label-{1}">{0}</span>'.format(
             status, {'spam': 'danger', 'edited': 'info',
                      'published': 'primary', 'deleted': 'warning'}.get(status, 'default')

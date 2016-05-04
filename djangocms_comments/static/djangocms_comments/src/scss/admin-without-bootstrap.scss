@@ -12,6 +12,14 @@
 
     #controls {
         float: right;
+        .btn-group {
+            float: right
+        }
+        .is-moderated {
+            color: #985f0d;
+            clear: both;
+            padding-top: 10px;
+        }
     }
 
     width: 80%;
