@@ -1,9 +1,20 @@
+/* line 4, ../scss/comments.scss */
 .comment.unpublished .panel-body {
-  background: url("../img/unpublished.png"); }
+  background: url("../img/unpublished.png");
+}
+/* line 8, ../scss/comments.scss */
+.comment.spam .panel-body {
+  border-top: 2px solid #ac2925;
+}
+/* line 12, ../scss/comments.scss */
 .comment .thumbnail {
-  padding: 0; }
+  padding: 0;
+}
+/* line 15, ../scss/comments.scss */
 .comment .panel {
-  position: relative; }
+  position: relative;
+}
+/* line 18, ../scss/comments.scss */
 .comment .panel > .panel-heading:after, .comment .panel > .panel-heading:before {
   position: absolute;
   top: 11px;
@@ -15,31 +26,42 @@
   content: " ";
   border-color: transparent;
   border-style: solid solid outset;
-  pointer-events: none; }
+  pointer-events: none;
+}
+/* line 30, ../scss/comments.scss */
 .comment .panel > .panel-heading:after {
   border-width: 7px;
   border-right-color: #f7f7f7;
   margin-top: 1px;
-  margin-left: 2px; }
+  margin-left: 2px;
+}
+/* line 36, ../scss/comments.scss */
 .comment .panel > .panel-heading:before {
   border-right-color: #ddd;
-  border-width: 8px; }
+  border-width: 8px;
+}
+/* line 41, ../scss/comments.scss */
 .comment pre {
   border: 0;
   background: transparent;
   font-family: 'Roboto Slab', 'Roboto', serif;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
+/* line 51, ../scss/comments.scss */
 .comment-box textarea {
   height: 150px;
-  max-height: 450px; }
+  max-height: 450px;
+}
+/* line 56, ../scss/comments.scss */
 .comment-box .avatar {
   float: left;
   padding-bottom: 15px;
-  padding-right: 15px; }
+  padding-right: 15px;
+}
+/* line 62, ../scss/comments.scss */
 .comment-box .dynamic-gravatar {
   width: 100%;
-  max-width: 150px; }
-
-/*# sourceMappingURL=comments.css.map */
+  max-width: 150px;
+}

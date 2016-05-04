@@ -30,6 +30,7 @@ class CommentsPlugin(CMSPluginBase):
         }
         context['form'] = get_form_class(request)(initial=initial)
         context['is_user'] = get_is_user(request)
+        context['is_staff'] = request.user.is_staff
         return super(CommentsPlugin, self).render(context, instance, placeholder)
 
     @staticmethod
@@ -37,7 +38,7 @@ class CommentsPlugin(CMSPluginBase):
         ct = ct or ContentType.objects.get_for_model(obj)
         comments = Comment.objects.filter(page_type=ct, page_id=obj.pk)
         if not getattr(request.user, 'is_staff', False):
-            comments = comments.filter(published=True)
+            comments = comments.filter(published=True).exclude(moderated='spam')
         return comments
 
 

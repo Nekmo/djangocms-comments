@@ -5,6 +5,10 @@
         background: url('../img/unpublished.png');
     }
 
+    &.spam .panel-body {
+        border-top: 2px solid #ac2925;
+    }
+
     .thumbnail {
         padding: 0;
     }
