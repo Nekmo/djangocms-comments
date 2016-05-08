@@ -12,6 +12,10 @@ COMMENT_PREVENT_USURP_USERNAME = True
 COMMENTS_ADMIN_WITH_BOOTSTRAP3 = True
 COMMENTS_FORCE_STATIC_SRC = False
 
+BOOTSTRAP3_COLS = 24
+BOOTSTRAP3_AVATAR_COLS = 3
+BOOTSTRAP3_SELF_ANON_AVATAR_COLS = 5
+
 # Override my settings usign Django Settings
 for var_name, value in dict(locals()).items():
     if var_name.isupper():

@@ -12,7 +12,7 @@
         {% endif %}
         {% if is_user %}
         <div class="row">
-            <div class="col-md-24">
+            <div class="col-md-{{ comments_setting.BOOTSTRAP3_COLS }}">
                 <img src="http://www.gravatar.com/avatar/{{ request.user.email|md5 }}" class="avatar" />
                 <div>
                     <strong>{{ request.user }}</strong>
@@ -23,19 +23,19 @@
         </div>
         {% else %}
         <div class="row">
-            <div class="col-md-19">
+            <div class="col-md-{{ comments_settings.BOOTSTRAP3_COLS|substract:comments_setting.BOOTSTRAP3_SELF_ANON_AVATAR_COLS }}">
                 {% bootstrap_field form.username show_label=false horizontal_label_class='col-md-0' %}
                 {% bootstrap_field form.email show_label=false horizontal_label_class='col-md-0' %}
                 {% bootstrap_field form.website show_label=false horizontal_label_class='col-md-0' %}
             </div>
-            <div class="col-md-5">
+            <div class="col-md-{{ comments_setting.BOOTSTRAP3_SELF_ANON_AVATAR_COLS }}">
                 <img src="http://www.gravatar.com/avatar/?s=150&d=mm" class="avatar dynamic-gravatar" />
             </div>
         </div>
         {% endif %}
         <div class="row">
             {% bootstrap_form_errors form %}
-            <div class="col-md-24">{% bootstrap_field form.body show_label=false %}</div>
+            <div class="col-md-{{ comments_setting.BOOTSTRAP3_COLS }}">{% bootstrap_field form.body show_label=false %}</div>
         </div>
         {{ form.config_id }}
         {{ form.page_type }}

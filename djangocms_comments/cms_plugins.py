@@ -23,6 +23,7 @@ class CommentsPlugin(CMSPluginBase):
         ct = ContentType.objects.get_for_model(obj)
         context['comments'] = self.get_comments(request, obj, ct)
         context['use_src'] = settings.COMMENTS_FORCE_STATIC_SRC
+        context['comments_settings'] = settings
         initial = {
             'config_id': instance.config.pk,
             'page_type': ct.pk,

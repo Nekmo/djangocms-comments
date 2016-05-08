@@ -10,3 +10,8 @@ register = template.Library()
 def md5_string(value):
     value = six.b(value)
     return hashlib.md5(value).hexdigest()
+
+
+@register.filter('substract')
+def subtract(value, arg):
+    return value - arg

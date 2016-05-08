@@ -1,10 +1,10 @@
 {% load comments_utils i18n %}
 <div class="row comment{% if not comment.published %} unpublished{% endif %}
             {% if comment.moderated == 'spam' %} spam{% endif %}">
-    <div class="col-md-3">
+    <div class="col-md-{{ comments_settings.BOOTSTRAP3_AVATAR_COLS }}">
         <img src="http://www.gravatar.com/avatar/{{ comment.author.email|md5 }}" class="avatar" />
     </div>
-    <div class="col-md-21">
+    <div class="col-md-{{ comments_settings.BOOTSTRAP3_COLS|substract:comments_settings.BOOTSTRAP3_AVATAR_COLS }}">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>{{ comment.author }}</strong>
