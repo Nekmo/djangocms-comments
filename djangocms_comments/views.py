@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import FormView
 
+from djangocms_comments import settings
 from djangocms_comments.forms import UnregisteredCommentForm, CommentForm
 
 
@@ -50,7 +51,8 @@ class SaveComment(FormView):
             return self.render_to_response({
                 'form': self.create_new_form(form) if form.is_valid() else form,
                 'comment': self.comment,
-                'is_user': get_is_user(request)
+                'is_user': get_is_user(request),
+                'comments_settings': settings,
             })
         referrer = request.META.get('HTTP_REFERER', '')
         return redirect(referrer)
