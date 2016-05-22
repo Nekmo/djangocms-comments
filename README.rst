@@ -38,6 +38,8 @@ These are the principles of Django CMS Comments:
 - It is easy to use and install.
 - Comments really are in your website.
 
+Example: http://nekmo.com/es/blog/demo-page/
+
 Installation
 ============
 You can install DjangoCMS-Comments From **Pypi**::
