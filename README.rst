@@ -155,3 +155,9 @@ TODO
 Contribute
 ==========
 Please feel free to send a pull request. All suggestions are welcome.
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/Nekmo/djangocms-comments/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
