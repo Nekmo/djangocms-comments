@@ -98,9 +98,9 @@ class CommentForm(ModelForm):
 
 
 class UnregisteredCommentForm(CommentForm):
-    username = CharField(max_length=32)
-    email = EmailField()
-    website = URLField(required=False)
+    username = CharField(max_length=32, label=_('Username'))
+    email = EmailField(label=_('Email'))
+    website = URLField(required=False, label=_('Website'))
 
     class Meta:
         widgets = {
