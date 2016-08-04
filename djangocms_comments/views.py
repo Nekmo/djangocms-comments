@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import FormView
@@ -32,6 +33,8 @@ class SaveComment(FormView):
 
     def form_valid(self, form):
         self.comment = form.save()
+        if settings.EMAIL_NEW_COMMENTS:
+            self.email_new_comment()
         return form
 
     def form_invalid(self, form):
@@ -56,3 +59,11 @@ class SaveComment(FormView):
             })
         referrer = request.META.get('HTTP_REFERER', '')
         return redirect(referrer)
+
+    def email_new_comment(self):
+        to = settings.EMAIL_NEW_COMMENTS_ADDRESSES
+        subject = "New Comment Submitted"
+        body = "The following comment was posted by user {0}:\n\n{1}".format(self.comment.author, self.comment.body)
+        send_mail(subject, body, recipient_list=to, from_email=settings.DEFAULT_FROM_EMAIL)
+
+
