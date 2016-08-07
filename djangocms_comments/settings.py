@@ -16,6 +16,10 @@ BOOTSTRAP3_COLS = 24
 BOOTSTRAP3_AVATAR_COLS = 3
 BOOTSTRAP3_SELF_ANON_AVATAR_COLS = 5
 
+EMAIL_NEW_COMMENTS = False
+EMAIL_NEW_COMMENTS_ADDRESSES = []
+DEFAULT_FROM_EMAIL = ''
+
 # Override my settings usign Django Settings
 for var_name, value in dict(locals()).items():
     if var_name.isupper():
