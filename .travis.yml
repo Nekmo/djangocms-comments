@@ -42,16 +42,16 @@ after_success:
 - codecov
 matrix:
   exclude:
-  - python: 2.6
-    env: TOXENV='pep8'
-  - python: 2.7
-    env: TOXENV='pep8'
-  - python: 3.3
-    env: TOXENV='pep8'
-  - python: 3.4
-    env: TOXENV='pep8'
-  - python: 3.5
-    env: TOXENV='pep8'
+#  - python: 2.6
+#    env: TOXENV='pep8'
+#  - python: 2.7
+#    env: TOXENV='pep8'
+#  - python: 3.3
+#    env: TOXENV='pep8'
+#  - python: 3.4
+#    env: TOXENV='pep8'
+#  - python: 3.5
+#    env: TOXENV='pep8'
   # Python2.6 Django1.6
     env: DJANGO='django16' CMS='cms34'
   - python: 2.6
@@ -81,6 +81,8 @@ matrix:
     env: DJANGO='django19' CMS='cms34'
   - python: 2.6
     env: DJANGO='django19' CMS='cms33'
+  - python: 2.6
+    env: DJANGO='django19' CMS='cms32'
   # Python3.3 Django1.9
   - python: 3.3
     env: DJANGO='django19' CMS='cms34'
