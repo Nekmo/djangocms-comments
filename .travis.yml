@@ -42,8 +42,8 @@ after_success:
 - codecov
 matrix:
   exclude:
-#  - python: 2.6
-#    env: TOXENV='pep8'
+  - python: 2.6
+    env: TOXENV='pep8'
 #  - python: 2.7
 #    env: TOXENV='pep8'
 #  - python: 3.3
