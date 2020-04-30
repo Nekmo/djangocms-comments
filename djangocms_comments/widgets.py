@@ -23,7 +23,7 @@ class SignedHiddenInput(HiddenInput):
             value = value.replace(name_key, '', 1)
         return value
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         value = self.sign_value(name, value)
         return super(SignedHiddenInput, self).render(name, value, attrs=attrs)
 

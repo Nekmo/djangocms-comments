@@ -8,14 +8,14 @@ from djangocms_comments.forms import UnregisteredCommentForm, CommentForm
 
 
 def get_form_class(request):
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return UnregisteredCommentForm
     else:
         return CommentForm
 
 
 def get_is_user(request):
-    return not request.user.is_anonymous()
+    return not request.user.is_anonymous
 
 
 class SaveComment(FormView):

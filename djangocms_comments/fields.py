@@ -2,10 +2,62 @@ import django
 from django import forms
 from django.forms.fields import ChoiceField
 from django.forms.utils import flatatt
-from django.forms.widgets import CheckboxChoiceInput, ChoiceFieldRenderer, RadioChoiceInput, SubWidget, RendererMixin, \
-    Select, CheckboxInput
+#from django.forms.widgets import CheckboxChoiceInput, ChoiceFieldRenderer, RadioChoiceInput, SubWidget, RendererMixin, Select, CheckboxInput
+
+from django.forms.widgets import CheckboxInput, ChoiceWidget, Select
+
 from django.utils import html
 
+class SubWidget(object):
+    """
+    Some widgets are made of multiple HTML elements -- namely, RadioSelect.
+    This is a class that represents the "inner" HTML element of a widget.
+    """
+    def __init__(self, parent_widget, name, value, attrs, choices):
+        self.parent_widget = parent_widget
+        self.name, self.value = name, value
+        self.attrs, self.choices = attrs, choices
+
+    def __str__(self):
+        args = [self.name, self.value, self.attrs]
+        if self.choices:
+            args.append(self.choices)
+        return self.parent_widget.render(*args)
+
+class RendererMixin(object):
+    renderer = None  # subclasses must define this
+    _empty_value = None
+
+    def __init__(self, *args, **kwargs):
+        # Override the default renderer if we were passed one.
+        renderer = kwargs.pop('renderer', None)
+        if renderer:
+            self.renderer = renderer
+        super(RendererMixin, self).__init__(*args, **kwargs)
+
+    def subwidgets(self, name, value, attrs=None):
+        for widget in self.get_renderer(name, value, attrs):
+            yield widget
+
+    def get_renderer(self, name, value, attrs=None):
+        """Returns an instance of the renderer."""
+        if value is None:
+            value = self._empty_value
+        final_attrs = self.build_attrs(attrs)
+        return self.renderer(name, value, final_attrs, self.choices)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        return self.get_renderer(name, value, attrs).render()
+
+    def id_for_label(self, id_):
+        # Widgets using this RendererMixin are made of a collection of
+        # subwidgets, each with their own <label>, and distinct ID.
+        # The IDs are made distinct by a "_X" suffix, where X is the zero-based
+        # index of the choice field. Thus, the label for the main widget should
+        # reference the first subwidget, hence the "_0" suffix.
+        if id_:
+            id_ += '_0'
+        return id_
 
 from django.utils.encoding import python_2_unicode_compatible, force_text
 if django.VERSION < (1, 7):
@@ -17,7 +69,7 @@ from django.utils.html import format_html
 
 
 class SubmitButtonWidget(forms.Widget):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         return '<input type="submit" name="%s" value="%s">' % (html.escape(name), html.escape(value))
 
 
@@ -33,7 +85,7 @@ class SubmitButtonField(forms.Field):
         return value
 
 
-class ButtonGroupRenderer(ChoiceFieldRenderer):
+class ButtonGroupRenderer(ChoiceWidget):
     outer_html = '<div class="btn-group" role="group">{content}</div>'
     inner_html = '{choice_value}{sub_widgets}'
 
@@ -63,7 +115,7 @@ class ChoiceButton(SubWidget):
     def __str__(self):
         return self.render()
 
-    def render(self, name=None, value=None, attrs=None, choices=()):
+    def render(self, name=None, value=None, attrs=None, choices=(), renderer=None):
         if self.id_for_label:
             label_for = format_html(' for="{}"', self.id_for_label)
         else:
@@ -99,7 +151,7 @@ class Button(CheckboxInput):
         self.values = values or ['True', 'False']
         super(Button, self).__init__(attrs, check_test)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         attrs = dict(attrs or {})
         attrs.update(self.attrs)
         enabled_class = attrs.pop('enabled_class', 'btn-primary')

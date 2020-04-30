@@ -39,13 +39,13 @@ class Migration(migrations.Migration):
                 ('published', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('author_type', models.ForeignKey(to='contenttypes.ContentType', related_name='+')),
+                ('author_type', models.ForeignKey(to='contenttypes.ContentType', related_name='+', on_delete=models.PROTECT)),
             ],
         ),
         migrations.CreateModel(
             name='Comments',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(to='cms.CMSPlugin', primary_key=True, parent_link=True, serialize=False, auto_created=True)),
+                ('cmsplugin_ptr', models.OneToOneField(to='cms.CMSPlugin', primary_key=True, parent_link=True, serialize=False, auto_created=True, on_delete=models.PROTECT)),
                 ('published_by_default', models.BooleanField(default=True)),
             ],
             options={
@@ -66,21 +66,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comments',
             name='config',
-            field=models.ForeignKey(to='djangocms_comments.CommentsConfig'),
+            field=models.ForeignKey(to='djangocms_comments.CommentsConfig', on_delete=models.PROTECT),
         ),
         migrations.AddField(
             model_name='comment',
             name='config',
-            field=models.ForeignKey(to='djangocms_comments.CommentsConfig'),
+            field=models.ForeignKey(to='djangocms_comments.CommentsConfig', on_delete=models.PROTECT),
         ),
         migrations.AddField(
             model_name='comment',
             name='moderated_by',
-            field=models.ForeignKey(null=True, to=settings.AUTH_USER_MODEL, blank=True),
+            field=models.ForeignKey(null=True, to=settings.AUTH_USER_MODEL, blank=True, on_delete=models.PROTECT),
         ),
         migrations.AddField(
             model_name='comment',
             name='page_type',
-            field=models.ForeignKey(to='contenttypes.ContentType', related_name='+'),
+            field=models.ForeignKey(to='contenttypes.ContentType', related_name='+', on_delete=models.PROTECT),
         ),
     ]
