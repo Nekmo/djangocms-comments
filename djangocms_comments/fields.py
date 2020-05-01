@@ -44,10 +44,10 @@ class RendererMixin(object):
         if value is None:
             value = self._empty_value
         final_attrs = self.build_attrs(attrs)
-        return self.renderer(name, value, final_attrs, self.choices)
+        return self.renderer(final_attrs, self.choices)
 
     def render(self, name, value, attrs=None, renderer=None):
-        return self.get_renderer(name, value, attrs).render()
+        return self.get_renderer(name, value, attrs).render(name, value)
 
     def id_for_label(self, id_):
         # Widgets using this RendererMixin are made of a collection of
@@ -85,7 +85,7 @@ class SubmitButtonField(forms.Field):
         return value
 
 
-class ButtonGroupRenderer(ChoiceWidget):
+class ButtonGroupRenderer(Select):
     outer_html = '<div class="btn-group" role="group">{content}</div>'
     inner_html = '{choice_value}{sub_widgets}'
 
