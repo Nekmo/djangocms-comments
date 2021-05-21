@@ -185,8 +185,20 @@ def find_package_data(where='.', package='',
 # Lista de dependencias a instalar
 if os.path.exists(requirements_path):
     requirements = list(parse_requirements(requirements_path, session=uuid.uuid1()))
-    install_requires = [str(ir.req) for ir in requirements]
-    dependency_links = [get_url(ir) for ir in requirements if get_url(ir)]
+    print("requirements:")
+    print(requirements)
+    # import pdb
+    # pdb.set_trace()
+    # breakpoint()
+    #print(ir.comes_from)
+    install_requires = [str(ir.requirement) for ir in requirements]
+    comes_from = [ir.comes_from for ir in requirements]
+    line_source = [ir.line_source for ir in requirements]
+    print(install_requires)
+    print(comes_from)
+    print(line_source)
+    #dependency_links = [get_url(ir.requirement) for ir in requirements if get_url(ir)]
+    #print(dependency_links)
 else:
     install_requires = INSTALL_REQUIRES
     dependency_links = []
@@ -308,7 +320,7 @@ setup(
 
     provides=modules,
     install_requires=install_requires,
-    dependency_links=dependency_links,
+    #dependency_links=dependency_links,
 
     packages=packages,
     include_package_data=True,
