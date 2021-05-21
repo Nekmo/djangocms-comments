@@ -1,117 +1,58 @@
 language: python
 sudo: false
+dist: xenial
 python:
+- 3.8
+- 3.7
+- 3.6
 - 3.5
-- 3.4
-- 3.3
 - 2.7
-- 2.6
+cache: pip
 env:
   matrix:
   - TOXENV='pep8'
-  #- DJANGO='django110' CMS='cms34'
-  #- DJANGO='django110' CMS='cms33'
-  #- DJANGO='django110' CMS='cms32'
-  - DJANGO='django19' CMS='cms34'
-  - DJANGO='django19' CMS='cms33'
-  - DJANGO='django19' CMS='cms32'
-  - DJANGO='django18' CMS='cms33'
-  - DJANGO='django18' CMS='cms32'
-  - DJANGO='django18' CMS='cms31'
-  - DJANGO='django17' CMS='cms33'
-  - DJANGO='django17' CMS='cms32'
-  - DJANGO='django17' CMS='cms31'
-  - DJANGO='django17' CMS='cms30'
-  - DJANGO='django16' CMS='cms33'
-  - DJANGO='django16' CMS='cms32'
-  - DJANGO='django16' CMS='cms31'
-  - DJANGO='django16' CMS='cms30'
+  - DJANGO='django30' CMS='cms37'
+  - DJANGO='django22' CMS='cms37'
+  - DJANGO='django21' CMS='cms37'
+  - DJANGO='django21' CMS='cms36'
+  - DJANGO='django21' CMS='cms35'
+  - DJANGO='django111' CMS='cms37'
+  - DJANGO='django111' CMS='cms36'
+  - DJANGO='django111' CMS='cms35'
+
   global:
     secure: as/YLpq4Pkw0oCsouV/jO+wYjaXSTV07gQYXCSC4F8F4i7Ops7qnoemn6ch/hG+nlRsw3O1sjz9M0w7mty7fhzGUdWGqFMUrjbJv9g/Ga1vnlJ6moq+8+4i20GEjnj24BiRrdtVs3DXPQAWw1zYykl1UAGiYPWx6GRO+04ePi1R5ZIPg6p07l5kw3fSm048O35iZ4gCyB4Xgp+w00mSZEm2XwlYcHKdjL+qrSGIKSfFkztRHDARwV++muYzBXfR1W9DrqCAD6Hh2UsXFurIKQ+5DSpBDpzAiwH8N7aXmOWvDZFNO5CjwKGnLp347UIWKlz4wrtVT9J8RZJ8TH/FF+iuiS7RxhXk9sfByFHRRuRTdMbj+mo6JCzfiw39pgi/MwZ+cF3aWAW556EeSPuLgmouyX8gPf8vGapuUJKhxh+irweYaZzquk1vAc/v47VBJWuxxa9vdbFkFUyo5LbiKnEm4GMcAk8YMdRF4UnaXPysIJUwytb2S6hrr4TRTJozqDv/T9hkfq2OgBkdCF8KkvWQ9CSsvZoaX+wC5/3OucT5xhyLVe0i4Ix+ushA5AlsPHAZoeih8YxNVFxWm5aJWHYc4vxABCEzISTPZyD1XwjeO5faaVUuGU7wLbiRNOsLy1Gvz4uqAB+ZlTsog/Uv81c7395zeX6w6kzrEyG0Tc+M=
 before_install:
 - pip install codecov tox>=1.8
 install:
-- if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then export PYVER=py26; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi
-- if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi
-- if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then export PYVER=py36; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then export PYVER=py37; fi"
+  - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi"
 script: COMMAND='coverage run' tox -e$TOXENV
 after_success:
 - codecov
 matrix:
   exclude:
-  - python: 2.6
-    env: TOXENV='pep8'
-  - python: 2.7
-    env: TOXENV='pep8'
-  - python: 3.3
-    env: TOXENV='pep8'
-#  - python: 3.4
-#    env: TOXENV='pep8'
-#  - python: 3.5
-#    env: TOXENV='pep8'
-  # Python2.6 Django1.6
-    env: DJANGO='django16' CMS='cms34'
-  - python: 2.6
-    env: DJANGO='django16' CMS='cms33'
-  - python: 2.6
-    env: DJANGO='django16' CMS='cms32'
-  # Python2.6 Django1.7
-  - python: 2.6
-    env: DJANGO='django17' CMS='cms34'
-  - python: 2.6
-    env: DJANGO='django17' CMS='cms33'
-  - python: 2.6
-    env: DJANGO='django17' CMS='cms32'
-  - python: 2.6
-    env: DJANGO='django17' CMS='cms31'
-  - python: 2.6
-    env: DJANGO='django17' CMS='cms30'
-  # Python2.6 Django1.8
-  - python: 2.6
-    env: DJANGO='django18' CMS='cms33'
-  - python: 2.6
-    env: DJANGO='django18' CMS='cms32'
-  - python: 2.6
-    env: DJANGO='django18' CMS='cms31'
-  # Python2.6 Django1.9
-  - python: 2.6
-    env: DJANGO='django19' CMS='cms34'
-  - python: 2.6
-    env: DJANGO='django19' CMS='cms33'
-  - python: 2.6
-    env: DJANGO='django19' CMS='cms32'
-  # Python3.3 Django1.9
-  - python: 3.3
-    env: DJANGO='django19' CMS='cms34'
-  - python: 3.3
-    env: DJANGO='django19' CMS='cms33'
-  - python: 3.3
-    env: DJANGO='django19' CMS='cms32'
-  # Python3.5 Django1.6
-  - python: 3.5
-    env: DJANGO='django16' CMS='cms34'
-  - python: 3.5
-    env: DJANGO='django16' CMS='cms33'
-  - python: 3.5
-    env: DJANGO='django16' CMS='cms32'
-  - python: 3.5
-    env: DJANGO='django16' CMS='cms31'
-  - python: 3.5
-    env: DJANGO='django16' CMS='cms30'
-  # Python3.5 Django1.7
-  - python: 3.5
-    env: DJANGO='django17' CMS='cms34'
-  - python: 3.5
-    env: DJANGO='django17' CMS='cms33'
-  - python: 3.5
-    env: DJANGO='django17' CMS='cms32'
-  - python: 3.5
-    env: DJANGO='django17' CMS='cms31'
-  - python: 3.5
-    env: DJANGO='django17' CMS='cms30'
+    - python: 2.7
+      env: DJANGO='django30' CMS='cms37'
+    - python: 2.7
+      env: DJANGO='django22' CMS='cms37'
+    - python: 2.7
+      env: DJANGO='django21' CMS='cms37'
+    - python: 2.7
+      env: DJANGO='django21' CMS='cms36'
+    - python: 2.7
+      env: DJANGO='django21' CMS='cms35'
+    - python: 2.7
+      env: DJANGO='django20' CMS='cms37'
+    - python: 2.7
+      env: DJANGO='django20' CMS='cms36'
+    - python: 2.7
+      env: DJANGO='django20' CMS='cms35'
+    - python: 3.5
+      env: DJANGO='django30' CMS='cms37'
 deploy:
   provider: pypi
   user: nekmo
